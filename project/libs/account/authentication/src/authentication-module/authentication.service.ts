@@ -13,7 +13,7 @@ export class AuthenticationService {
     private readonly shopUserRepository: ShopUserRepository
   ) {}
 
-  public async register(dto: CreateUserDto) {
+  public async register(dto: CreateUserDto): Promise<ShopUserEntity> {
     const {email, login, password} = dto;
 
     const shopUser = {
@@ -32,8 +32,9 @@ export class AuthenticationService {
 
     const userEntity = await new ShopUserEntity(shopUser).setPassword(password);
 
-    return this.shopUserRepository
-      .save(userEntity);
+    this.shopUserRepository.save(userEntity);
+
+    return userEntity;
   }
 
   public async verifyUser(dto: LoginUserDto) {
