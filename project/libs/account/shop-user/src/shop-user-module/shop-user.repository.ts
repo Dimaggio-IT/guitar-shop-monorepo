@@ -10,4 +10,15 @@ export class ShopUserRepository extends BaseMemoryRepository<ShopUserEntity> {
   constructor(entityFactory: ShopUserFactory) {
     super(entityFactory);
   }
+
+  public async findByEmail(email: string): Promise<ShopUserEntity | null> {
+    const entities = Array.from(this.entities.values());
+    const user = entities.find((entity) => entity.email === email);
+
+    if (!user) {
+      return null;
+    }
+
+    return this.entityFactory.create(user);
+  }
 }
