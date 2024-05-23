@@ -1,1 +1,1 @@
-export { ApiConfigModule } from './account-config.module';
+export { ConfigurationModule } from './configuration.module';
