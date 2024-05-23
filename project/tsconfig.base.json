@@ -16,8 +16,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@project/authentication": ["libs/account/authentication/src/index.ts"],
-      "@project/shop-user": ["libs/account/shop-user/src/index.ts"],
+      "@project/configuration": ["libs/configuration/src/index.ts"],
+      "@project/authentication": ["libs/authentication/src/index.ts"],
+      "@project/shop-user": ["libs/shop-user/src/index.ts"],
       "@project/shared/core": ["libs/shared/core/src/index.ts"],
       "@project/shared/helpers": ["libs/shared/helpers/src/index.ts"],
       "@project/shared/data-access": ["libs/shared/data-access/src/index.ts"]
