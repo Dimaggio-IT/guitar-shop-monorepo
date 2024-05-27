@@ -3,8 +3,8 @@ export const AUTH_USER_NOT_FOUND = 'User not found';
 export const AUTH_USER_PASSWORD_WRONG = 'User password is wrong';
 
 export enum LoginLength {
-  Min = 3,
-  Max = 50,
+  Min = 1,
+  Max = 15,
 }
 
 export enum PasswordLength {

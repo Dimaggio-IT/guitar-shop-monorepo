@@ -5,14 +5,6 @@ import { AuthenticationValidateMessage, LoginLength, PasswordLength } from '../a
 
 export class CreateUserDto {
   @ApiProperty({
-    description: 'User\'s avatar',
-    example: 'https://assets.htmlacademy.ru/previews/779/20230522_f0b2228f-150.jpg'
-  })
-  @IsString()
-  @IsOptional()
-  public avatar?: string;
-
-  @ApiProperty({
     description: 'User\'s unique address',
     example: 'user@user.ru'
   })

@@ -1,5 +1,5 @@
-import { BlogUserEntity } from '@project/blog-user';
+import { ShopUserEntity } from '@project/shop-user';
 
 export interface RequestWithUser {
-  user?: BlogUserEntity;
+  user?: ShopUserEntity;
 }

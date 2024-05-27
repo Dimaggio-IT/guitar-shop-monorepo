@@ -3,7 +3,6 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { MongoIdValidationPipe } from '@project/pipes';
 import { fillDto } from '@project/shared/helpers';
-import { NotifyService } from '@project/account-notify';
 
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -13,7 +12,6 @@ import { AuthenticationResponseMessage } from './authentication.constant';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { RequestWithUser } from './request-with-user.interface';
-import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 import { RequestWithTokenPayload } from './request-with-token-payload.interface';
 
 @ApiTags('authentication')
@@ -21,7 +19,6 @@ import { RequestWithTokenPayload } from './request-with-token-payload.interface'
 export class AuthenticationController {
   constructor(
     private readonly authService: AuthenticationService,
-    private readonly notifyService: NotifyService,
   ) { }
 
   @ApiResponse({
@@ -35,9 +32,8 @@ export class AuthenticationController {
   @Post('register')
   public async create(@Body() dto: CreateUserDto) {
     const newUser = await this.authService.register(dto);
-    const { email, login, id: userId } = newUser;
-    await this.notifyService.registerSubscriber({ email, login, userId });
-
+    const { email, login, id } = newUser;
+    // TODO: send email with link to confirm registration
     return newUser.toPOJO();
   }
 
@@ -72,17 +68,6 @@ export class AuthenticationController {
   public async show(@Param('id', MongoIdValidationPipe) id: string) {
     const existUser = await this.authService.getUser(id);
     return existUser.toPOJO();
-  }
-
-  @UseGuards(JwtRefreshGuard)
-  @Post('refresh')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Get a new access/refresh tokens'
-  })
-  public async refreshToken(@Req() { user }: RequestWithUser) {
-    return this.authService.createUserToken(user);
   }
 
   @UseGuards(JwtAuthGuard)

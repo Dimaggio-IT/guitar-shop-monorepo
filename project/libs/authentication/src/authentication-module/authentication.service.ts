@@ -13,14 +13,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
-import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
+import { ShopUserRepository, ShopUserEntity } from '@project/shop-user';
 import { Token, User } from '@project/shared/core';
 import { createJWTPayload } from '@project/shared/helpers';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
-import { dbConfig, jwtConfig } from '@project/account-config';
+import { pgsqlConfig, jwtConfig } from '@project/configuration';
 import {
   AUTH_USER_EXISTS,
   AUTH_USER_NOT_FOUND,
@@ -33,48 +33,45 @@ export class AuthenticationService {
   private readonly logger = new Logger(AuthenticationService.name);
 
   constructor(
-    private readonly blogUserRepository: BlogUserRepository,
+    private readonly shopUserRepository: ShopUserRepository,
 
-    @Inject(dbConfig.KEY)
-    private readonly databaseConfig: ConfigType<typeof dbConfig>,
+    @Inject(pgsqlConfig.KEY)
+    private readonly databaseConfig: ConfigType<typeof pgsqlConfig>,
 
     private readonly jwtService: JwtService,
 
     @Inject(jwtConfig.KEY)
     private readonly jwtOptions: ConfigType<typeof jwtConfig>,
-
-    private readonly refreshTokenService: RefreshTokenService,
   ) { }
 
-  public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
-    const { avatar = '', email, login, password } = dto;
+  public async register(dto: CreateUserDto): Promise<ShopUserEntity> {
+    const { email, login, password } = dto;
 
-    const blogUser = {
-      avatar,
+    const shopUser = {
       email,
       login,
       passwordHash: ''
     };
 
-    const existUser = await this.blogUserRepository
+    const existUser = await this.shopUserRepository
       .findByEmail(email);
 
     if (existUser) {
       throw new ConflictException(AUTH_USER_EXISTS);
     }
 
-    const userEntity = await new BlogUserEntity(blogUser)
+    const userEntity = await new ShopUserEntity(shopUser)
       .setPassword(password)
 
-    this.blogUserRepository
+    this.shopUserRepository
       .save(userEntity);
 
     return userEntity;
   }
 
-  public async verifyUser(dto: LoginUserDto): Promise<BlogUserEntity> {
+  public async verifyUser(dto: LoginUserDto): Promise<ShopUserEntity> {
     const { email, password } = dto;
-    const existUser = await this.blogUserRepository.findByEmail(email);
+    const existUser = await this.shopUserRepository.findByEmail(email);
 
     if (!existUser) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
@@ -87,8 +84,8 @@ export class AuthenticationService {
     return existUser;
   }
 
-  public async getUser(id: string): Promise<BlogUserEntity> {
-    const user = await this.blogUserRepository.findById(id);
+  public async getUser(id: string): Promise<ShopUserEntity> {
+    const user = await this.shopUserRepository.findById(id);
 
     if (!user) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
@@ -97,9 +94,9 @@ export class AuthenticationService {
     return user;
   }
 
-  public async changePassword(dto: ChangePasswordUserDto): Promise<BlogUserEntity> {
+  public async changePassword(dto: ChangePasswordUserDto): Promise<ShopUserEntity> {
     const { password, newPassword, userId } = dto;
-    const user = await this.blogUserRepository.findById(userId);
+    const user = await this.shopUserRepository.findById(userId);
 
     if (!await user.comparePassword(password)) {
       throw new BadRequestException(AUTH_USER_PASSWORD_WRONG);
@@ -107,31 +104,22 @@ export class AuthenticationService {
 
     const userEntity = await user.setPassword(newPassword);
 
-    return this.blogUserRepository.updateById(userId, userEntity);
+    return this.shopUserRepository.updateById(userId, userEntity);
   }
 
   public async createUserToken(user: User): Promise<Token> {
     const accessTokenPayload = createJWTPayload(user);
-    const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
-    await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
-
     try {
       const accessToken = await this.jwtService.signAsync(accessTokenPayload);
-      const refreshToken = await this.jwtService.signAsync(refreshTokenPayload, {
-        secret: this.jwtOptions.refreshTokenSecret,
-        expiresIn: this.jwtOptions.refreshTokenExpiresIn
-      });
-
-      return { accessToken, refreshToken };
-
+      return { accessToken };
     } catch (error) {
       this.logger.error('[Token generation error]: ' + error.message);
       throw new HttpException('Ошибка при создании токена.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  public async getUserByEmail(email: string): Promise<BlogUserEntity> {
-    const user = await this.blogUserRepository.findByEmail(email);
+  public async getUserByEmail(email: string): Promise<ShopUserEntity> {
+    const user = await this.shopUserRepository.findByEmail(email);
 
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);

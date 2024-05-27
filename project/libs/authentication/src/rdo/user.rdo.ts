@@ -7,14 +7,7 @@ export class UserRdo {
     example: '13'
   })
   @Expose()
-  public userId: string;
-
-  @ApiProperty({
-    description: 'user\'s avatar path',
-    example: '/images/user.png'
-  })
-  @Expose()
-  public avatar?: string;
+  public id: string;
 
   @ApiProperty({
     description: 'user\'s email',
@@ -36,18 +29,4 @@ export class UserRdo {
   })
   @Expose()
   public registrationDate: string;
-
-  @ApiProperty({
-    description: 'user\'s publications count',
-    example: '2',
-  })
-  @Expose()
-  public publicationsCount: number;
-
-  @ApiProperty({
-    description: 'user\'s subscribers count',
-    example: '1',
-  })
-  @Expose()
-  public subscribersCount: number;
 }

@@ -23,5 +23,5 @@ export class ChangePasswordUserDto {
     description: 'User\'s id',
     example: '59004ff1-e82e-464e-8bcf-81e748c47bc9'
   })
-  public userId: string;
+  public id: string;
 }
