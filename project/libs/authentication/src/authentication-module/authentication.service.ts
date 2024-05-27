@@ -1,45 +1,80 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import crypto from 'node:crypto'
+import { JwtService } from '@nestjs/jwt';
+import { ConfigType } from '@nestjs/config';
+import {
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 
-import { ShopUserRepository, ShopUserEntity } from '@project/shop-user';
-import { UserRole } from '@project/shared/core';
+import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
+import { Token, User } from '@project/shared/core';
+import { createJWTPayload } from '@project/shared/helpers';
 
 import { CreateUserDto } from '../dto/create-user.dto';
-import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from './authentication.constant';
 import { LoginUserDto } from '../dto/login-user.dto';
+import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
+import { dbConfig, jwtConfig } from '@project/account-config';
+import {
+  AUTH_USER_EXISTS,
+  AUTH_USER_NOT_FOUND,
+  AUTH_USER_PASSWORD_WRONG
+} from './authentication.constant';
+import { ChangePasswordUserDto } from '../dto/change-password.dto';
 
 @Injectable()
 export class AuthenticationService {
+  private readonly logger = new Logger(AuthenticationService.name);
+
   constructor(
-    private readonly shopUserRepository: ShopUserRepository
-  ) {}
+    private readonly blogUserRepository: BlogUserRepository,
 
-  public async register(dto: CreateUserDto): Promise<ShopUserEntity> {
-    const {email, login, password} = dto;
+    @Inject(dbConfig.KEY)
+    private readonly databaseConfig: ConfigType<typeof dbConfig>,
 
-    const shopUser = {
+    private readonly jwtService: JwtService,
+
+    @Inject(jwtConfig.KEY)
+    private readonly jwtOptions: ConfigType<typeof jwtConfig>,
+
+    private readonly refreshTokenService: RefreshTokenService,
+  ) { }
+
+  public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
+    const { avatar = '', email, login, password } = dto;
+
+    const blogUser = {
+      avatar,
       email,
       login,
-      role: UserRole.Admin,
       passwordHash: ''
     };
 
-    const existUser = await this.shopUserRepository
+    const existUser = await this.blogUserRepository
       .findByEmail(email);
 
     if (existUser) {
       throw new ConflictException(AUTH_USER_EXISTS);
     }
 
-    const userEntity = await new ShopUserEntity(shopUser).setPassword(password);
+    const userEntity = await new BlogUserEntity(blogUser)
+      .setPassword(password)
 
-    this.shopUserRepository.save(userEntity);
+    this.blogUserRepository
+      .save(userEntity);
 
     return userEntity;
   }
 
-  public async verifyUser(dto: LoginUserDto) {
-    const {email, password} = dto;
-    const existUser = await this.shopUserRepository.findByEmail(email);
+  public async verifyUser(dto: LoginUserDto): Promise<BlogUserEntity> {
+    const { email, password } = dto;
+    const existUser = await this.blogUserRepository.findByEmail(email);
 
     if (!existUser) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
@@ -52,11 +87,54 @@ export class AuthenticationService {
     return existUser;
   }
 
-  public async getUser(id: string) {
-    const user = await this.shopUserRepository.findById(id);
+  public async getUser(id: string): Promise<BlogUserEntity> {
+    const user = await this.blogUserRepository.findById(id);
 
-    if (! user) {
+    if (!user) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
+    }
+
+    return user;
+  }
+
+  public async changePassword(dto: ChangePasswordUserDto): Promise<BlogUserEntity> {
+    const { password, newPassword, userId } = dto;
+    const user = await this.blogUserRepository.findById(userId);
+
+    if (!await user.comparePassword(password)) {
+      throw new BadRequestException(AUTH_USER_PASSWORD_WRONG);
+    }
+
+    const userEntity = await user.setPassword(newPassword);
+
+    return this.blogUserRepository.updateById(userId, userEntity);
+  }
+
+  public async createUserToken(user: User): Promise<Token> {
+    const accessTokenPayload = createJWTPayload(user);
+    const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
+    await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
+
+    try {
+      const accessToken = await this.jwtService.signAsync(accessTokenPayload);
+      const refreshToken = await this.jwtService.signAsync(refreshTokenPayload, {
+        secret: this.jwtOptions.refreshTokenSecret,
+        expiresIn: this.jwtOptions.refreshTokenExpiresIn
+      });
+
+      return { accessToken, refreshToken };
+
+    } catch (error) {
+      this.logger.error('[Token generation error]: ' + error.message);
+      throw new HttpException('Ошибка при создании токена.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  public async getUserByEmail(email: string): Promise<BlogUserEntity> {
+    const user = await this.blogUserRepository.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
     }
 
     return user;
