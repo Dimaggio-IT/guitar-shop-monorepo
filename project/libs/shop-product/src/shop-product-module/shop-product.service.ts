@@ -2,18 +2,18 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 
 import { PaginationResult } from '@project/shared/core';
 
-import { BlogPostRepository } from './blog-post.repository';
-import { TPostDto } from './dto/create-post.dto';
-import { BlogPostEntity } from './blog-post.entity';
-import { BlogCommonQuery } from './query/blog-post.common-query';
+import { BlogPostRepository } from './shop-product.repository';
+import { TPostDto } from './dto/create-product.dto';
+import { BlogPostEntity } from './shop-product.entity';
+import { ShopQuery } from './query/shop-product.common-query';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { BlogPostFactory } from './blog-post.factory';
-import { PostError } from './blog-post.constant';
-import { BlogTitleQuery } from './query/blog-post.title-query';
+import { BlogPostFactory } from './shop-product.factory';
+import { ProductError } from './shop-product.constant';
+import { BlogTitleQuery } from './query/shop-product.title-query';
 
 
 @Injectable()
-export class BlogPostService {
+export class ShopProductService {
   constructor(
     private readonly postRepository: BlogPostRepository,
   ) { }
@@ -47,7 +47,7 @@ export class BlogPostService {
     return this.postRepository.getPostCount({ userId: id });
   }
 
-  public async getAllPostsByCommonQuery(query?: BlogCommonQuery): Promise<PaginationResult<BlogPostEntity>> {
+  public async getAllPostsByCommonQuery(query?: ShopQuery): Promise<PaginationResult<BlogPostEntity>> {
     return this.postRepository.findByCommonQuery(query);
   }
 
@@ -78,7 +78,7 @@ export class BlogPostService {
     const post = await this.postRepository.findById(id);
 
     if (post.isReposted) {
-      throw new BadRequestException(PostError.AlreadyReposted)
+      throw new BadRequestException(ProductError.AlreadyReposted)
     }
 
     post.userId = userId;

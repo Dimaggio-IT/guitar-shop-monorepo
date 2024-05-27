@@ -9,11 +9,11 @@ import {
   POST_DEFAULT_PAGE_COUNT,
   POST_DEFAULT_SORT_BY,
   PostTagDefaultParam
-} from '../blog-post.constant';
+} from '../shop-product.constant';
 import { ApiProperty } from '@nestjs/swagger';
 
 
-export class BlogCommonQuery {
+export class ShopQuery {
   @ApiProperty({
     description: 'Limit',
     example: 25,

@@ -4,22 +4,15 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-enum PostContent {
-  video
-  photo
-  link
-  quote
-  text
-}
-
-enum PostStatus {
-  posted
-  draft
+enum GuitarType {
+  electro
+  acoustics
+  ukukule
 }
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../../../node_modules/.prisma/client"
+  output   = "../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -27,49 +20,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id             String      @id @default(uuid())
-  userId         String?     @map("user_id")
-  type           PostContent @default(text)
-  status         PostStatus  @default(posted)
-  tags           String[]
-  comments       Comment[]
-  likes          Like[]
-  createdAt      DateTime    @default(now()) @map("created_at")
-  postedAt       DateTime    @default(now()) @map("posted_at")
-  isReposted     Boolean     @default(false) @map("is_reposted")
-  originalUserId String?     @map("original_user_id")
-  originalPostId String?     @map("original_post_id")
-  title          String?
+model Product {
+  id             String     @id @default(uuid())
+  name           String?
   description    String?
-  link           String?
-  quoteAuthor    String?
-  excerpt        String?
+  createdAt      DateTime   @default(now()) @map("created_at")
+  photo          String?
+  type           GuitarType @default(electro)
+  article        String?
+  StringCount    Int?
+  Price          Int?
 
-  @@index([title])
-  @@map("posts")
+  @@index([article])
+  @@map("products")
 }
 
-model Comment {
+model User {
   id        String   @id @default(uuid())
-  message   String
-  userId    String   @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  postId    String   @map("post_id")
+  login     String
+  email     String
+  password  String
 
-  @@index([postId])
-  @@map("comments")
-}
-
-model Like {
-  id        String   @id @default(uuid())
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String   @map("post_id")
-  userId    String   @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("likes")
+  @@index([email, login])
+  @@map("users")
 }

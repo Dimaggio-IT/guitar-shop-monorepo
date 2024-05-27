@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-import { BlogPostRdo } from './blog-post.rdo';
+import { BlogPostRdo } from './shop-product.rdo';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BlogPostWithPaginationRdo {

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 
 import { BlogCommentModule } from '@project/blog-comment';
-import { PrismaClientModule } from '@project/blog-models';
+import { PrismaClientModule } from '@project/models';
 
-import { BlogPostController } from './blog-post.controller';
-import { BlogPostService } from './blog-post.service';
-import { BlogPostRepository } from './blog-post.repository';
-import { BlogPostFactory } from './blog-post.factory';
+import { BlogPostController } from './shop-product.controller';
+import { ShopProductService } from './shop-product.service';
+import { BlogPostRepository } from './shop-product.repository';
+import { BlogPostFactory } from './shop-product.factory';
 import { BlogLikeModule } from '@project/blog-like';
 import { BlogNotifyModule } from '@project/blog-notify';
 
@@ -19,10 +19,10 @@ import { BlogNotifyModule } from '@project/blog-notify';
   ],
   controllers: [BlogPostController],
   providers: [
-    BlogPostService,
+    ShopProductService,
     BlogPostRepository,
     BlogPostFactory,
   ],
-  exports: [BlogPostService],
+  exports: [ShopProductService],
 })
-export class BlogPostModule { }
+export class ShopProductModule { }

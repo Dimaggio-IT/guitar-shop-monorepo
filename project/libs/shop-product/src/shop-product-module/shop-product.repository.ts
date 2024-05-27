@@ -3,13 +3,13 @@ import { Prisma } from '@prisma/client';
 
 import { PaginationResult, Post } from '@project/shared/core';
 import { BasePostgresRepository } from '@project/data-access';
-import { PrismaClientService } from '@project/blog-models';
+import { PrismaClientService } from '@project/models';
 
-import { BlogPostEntity } from './blog-post.entity';
-import { BlogPostFactory } from './blog-post.factory';
-import { BlogCommonQuery } from './query/blog-post.common-query';
+import { BlogPostEntity } from './shop-product.entity';
+import { BlogPostFactory } from './shop-product.factory';
+import { ShopQuery } from './query/shop-product.common-query';
 import { PostStatusValue } from 'libs/shared/core/src/lib/types/post-status.type';
-import { BlogTitleQuery } from './query/blog-post.title-query';
+import { BlogTitleQuery } from './query/shop-product.title-query';
 
 @Injectable()
 export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, Post> {
@@ -95,7 +95,7 @@ export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, P
     return this.createEntityFromDocument(record);
   }
 
-  public async findByCommonQuery(query?: BlogCommonQuery): Promise<PaginationResult<BlogPostEntity>> {
+  public async findByCommonQuery(query?: ShopQuery): Promise<PaginationResult<BlogPostEntity>> {
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit;
     const where: Prisma.PostWhereInput = {};

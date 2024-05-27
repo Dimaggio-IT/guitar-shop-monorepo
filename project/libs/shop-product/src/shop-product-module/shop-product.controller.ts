@@ -16,28 +16,28 @@ import {
 
 import { fillDto } from '@project/shared/helpers';
 
-import { BlogPostService } from './blog-post.service';
-import { BlogCommonQuery } from './query/blog-post.common-query';
-import { BlogPostWithPaginationRdo } from './rdo/blog-post-with-pagination.rdo';
-import { TPostDto } from './dto/create-post.dto';
+import { ShopProductService } from './shop-product.service';
+import { ShopQuery } from './query/shop-product.common-query';
+import { BlogPostWithPaginationRdo } from './rdo/shop-product-with-pagination.rdo';
+import { TPostDto } from './dto/create-product.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiResponse } from '@nestjs/swagger';
-import { PostError, PostInfo } from './blog-post.constant';
+import { ProductError, ProductInfo } from './shop-product.constant';
 import { JwtAuthGuard } from 'libs/account/authentication/src/guards/jwt-auth.guard';
 import { RequestWithUser } from 'libs/account/authentication/src/authentication-module/request-with-user.interface';
-import { BlogTitleQuery } from './query/blog-post.title-query';
+import { BlogTitleQuery } from './query/shop-product.title-query';
 import { BlogNotifyService } from '@project/blog-notify';
 
 @Controller('posts')
 export class BlogPostController {
   constructor(
-    private readonly postService: BlogPostService,
+    private readonly postService: ShopProductService,
     private readonly notifyService: BlogNotifyService,
   ) { }
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.Show,
+    description: ProductInfo.Show,
   })
   @Get('/:id')
   public async show(@Param('id') id: string) {
@@ -48,10 +48,10 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.ShowAll,
+    description: ProductInfo.ShowAll,
   })
   @Get('/')
-  public async index(@Query() query: BlogCommonQuery) {
+  public async index(@Query() query: ShopQuery) {
     const postsWithPagination = await this.postService.getAllPostsByCommonQuery(query);
     const result = {
       ...postsWithPagination,
@@ -63,7 +63,7 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.ShowUserPostCount,
+    description: ProductInfo.ShowUserPostCount,
   })
   @Get('user-posts-count/:id')
   public async getUserPostsCount(@Param('id') id: string) {
@@ -72,7 +72,7 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.Search,
+    description: ProductInfo.Search,
   })
   @Get('search')
   async searchPostsByTitle(@Query() query: BlogTitleQuery) {
@@ -83,11 +83,11 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.ShowAllUserDrafts,
+    description: ProductInfo.ShowAllUserDrafts,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: PostError.EmptyList,
+    description: ProductError.EmptyList,
   })
   @UseGuards(JwtAuthGuard)
   @Get('drafts')
@@ -99,7 +99,7 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: PostInfo.Add,
+    description: ProductInfo.Add,
   })
   @Post('/')
   public async create(@Body() dto: TPostDto) {
@@ -109,11 +109,11 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: PostInfo.Remove,
+    description: ProductInfo.Remove,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: PostError.Delete
+    description: ProductError.Delete
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/:id')
@@ -124,7 +124,7 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.Repost,
+    description: ProductInfo.Repost,
   })
   @UseGuards(JwtAuthGuard)
   @Post('/repost/:id')
@@ -139,7 +139,7 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.Update,
+    description: ProductInfo.Update,
   })
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
@@ -151,7 +151,7 @@ export class BlogPostController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: PostInfo.SendNews
+    description: ProductInfo.SendNews
   })
   @UseGuards(JwtAuthGuard)
   @Get('news')
