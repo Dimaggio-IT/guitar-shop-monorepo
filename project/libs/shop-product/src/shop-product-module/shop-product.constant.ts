@@ -26,12 +26,6 @@ export enum NameLength {
   Max = 100,
 }
 
-export enum GuitarType {
-  Electro = 'electro',
-  Acoustics = 'acoustics',
-  Ukukule = 'ukukule',
-}
-
 export enum DescriptionLength {
   Min = 20,
   Max = 1024,
@@ -45,11 +39,4 @@ export enum ArticleLength {
 export enum PriceLength {
   Min = 100,
   Max = 1_000_000,
-}
-
-export enum StringCount {
-  Four = 4,
-  Six = 6,
-  Seven = 7,
-  Twelve = 12,
 }

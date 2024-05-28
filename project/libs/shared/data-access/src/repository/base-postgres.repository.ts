@@ -1,4 +1,4 @@
-import { PrismaClientService } from '@project/models';
+import { PrismaClientService } from '@project/shared/models';
 import { Entity, StorableEntity, EntityFactory } from '@project/shared/core';
 import { Repository } from './repository.interface';
 
@@ -28,7 +28,7 @@ export abstract class BasePostgresRepository<
     throw new Error('Not implemented');
   }
 
-  public async updateById(id: T['id'], entity: T): Promise<T> {
+  public async update(entity: T): Promise<T> {
     throw new Error('Not implemented');
   }
 

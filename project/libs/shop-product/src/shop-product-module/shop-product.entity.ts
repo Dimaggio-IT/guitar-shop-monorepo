@@ -1,5 +1,5 @@
 import { Entity, Product, StorableEntity } from '@project/shared/core';
-import { GuitarType, StringCount } from './shop-product.constant';
+import { GuitarType, StringCount } from '@project/shared/core';
 
 export class ShopProductEntity extends Entity implements StorableEntity<Product> {
   public name?: string;
