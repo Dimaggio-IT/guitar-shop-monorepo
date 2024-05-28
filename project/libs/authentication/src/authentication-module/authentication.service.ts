@@ -1,4 +1,3 @@
-import crypto from 'node:crypto'
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import {
@@ -19,8 +18,7 @@ import { createJWTPayload } from '@project/shared/helpers';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
-import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
-import { pgsqlConfig, jwtConfig } from '@project/configuration';
+import { jwtConfig } from '@project/configuration';
 import {
   AUTH_USER_EXISTS,
   AUTH_USER_NOT_FOUND,
@@ -34,9 +32,6 @@ export class AuthenticationService {
 
   constructor(
     private readonly shopUserRepository: ShopUserRepository,
-
-    @Inject(pgsqlConfig.KEY)
-    private readonly databaseConfig: ConfigType<typeof pgsqlConfig>,
 
     private readonly jwtService: JwtService,
 
@@ -84,7 +79,7 @@ export class AuthenticationService {
     return existUser;
   }
 
-  public async getUser(id: string): Promise<ShopUserEntity> {
+  public async getUserById(id: string): Promise<ShopUserEntity> {
     const user = await this.shopUserRepository.findById(id);
 
     if (!user) {

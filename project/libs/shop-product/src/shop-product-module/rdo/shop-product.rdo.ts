@@ -1,5 +1,5 @@
+import { GuitarType } from '@project/shared/core';
 import { Expose } from 'class-transformer';
-import { GuitarType } from '../shop-product.constant';
 
 export class ShopProductRdo {
   @Expose()

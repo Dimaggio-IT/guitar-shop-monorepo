@@ -4,8 +4,9 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ArticleLength, DescriptionLength, GuitarType, NameLength, PriceLength, StringCount } from '../shop-product.constant';
+import { ArticleLength, DescriptionLength, NameLength, PriceLength } from '../shop-product.constant';
 import { Transform } from 'class-transformer';
+import { GuitarType, StringCount } from '@project/shared/core';
 
 export class CreateProductDto {
   @IsString()
@@ -22,7 +23,7 @@ export class CreateProductDto {
   public photo: string;
 
   @IsEnum(GuitarType)
-  public type: string;
+  public type: GuitarType;
 
   @IsString()
   @MinLength(ArticleLength.Min)

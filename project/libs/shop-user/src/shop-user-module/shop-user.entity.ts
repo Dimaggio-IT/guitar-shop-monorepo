@@ -1,14 +1,13 @@
 import { compare, genSalt, hash } from 'bcrypt';
 
 import { Entity } from '@project/shared/core';
-import { StorableEntity, AuthUser, UserRole } from '@project/shared/core';
+import { StorableEntity, AuthUser } from '@project/shared/core';
 
 import { SALT_ROUNDS } from './shop-user.constant';
 
 export class ShopUserEntity extends Entity implements StorableEntity<AuthUser> {
   public email: string;
   public login: string;
-  public role: UserRole;
   public passwordHash: string;
 
   constructor(user?: AuthUser) {
@@ -25,7 +24,6 @@ export class ShopUserEntity extends Entity implements StorableEntity<AuthUser> {
     this.email = user.email;
     this.login = user.login;
     this.passwordHash = user.passwordHash;
-    this.role = user.role ?? UserRole.Admin;
   }
 
   public toPOJO(): AuthUser {
@@ -33,7 +31,6 @@ export class ShopUserEntity extends Entity implements StorableEntity<AuthUser> {
       id: this.id,
       email: this.email,
       login: this.login,
-      role: this.role,
       passwordHash: this.passwordHash,
     }
   }

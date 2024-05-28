@@ -80,7 +80,7 @@ export class ShopProductController {
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
   public async delete(@Param('id', ParseUUIDPipe) id: string, @Req() { user }: RequestWithUser): Promise<void> {
-    return this.productService.deleteProduct(id, user.id);
+    return this.productService.deleteProductById(id);
   }
 
   @ApiResponse({
@@ -89,8 +89,8 @@ export class ShopProductController {
   })
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
-  public async update(@Param('id') id: string, @Body() dto: UpdateProductDto, @Req() { user }: RequestWithUser) {
-    const updatedProduct = await this.productService.updateProduct(id, dto, user.id);
+  public async update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    const updatedProduct = await this.productService.updateProduct(dto);
 
     return updatedProduct.toPOJO();
   }

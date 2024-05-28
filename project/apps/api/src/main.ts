@@ -1,7 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app/app.module';
 
@@ -24,10 +24,9 @@ async function bootstrap() {
     transform: true,
   }));
 
-  // const configService = app.get(ConfigService);
-  // const port = configService.get('application.port') || 4000;
+  const configService = app.get(ConfigService);
+  const port = configService.get('application.port') || 4000;
 
-  const port = 4000;
   await app.listen(port);
 
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);

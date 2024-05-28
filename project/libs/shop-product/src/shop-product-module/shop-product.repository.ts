@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 import { PaginationResult, Product } from '@project/shared/core';
-import { BasePostgresRepository } from '@project/data-access';
-import { PrismaClientService } from '@project/models';
+import { BasePostgresRepository } from '@project/shared/data-access';
+import { PrismaClientService } from '@project/shared/models';
 
 import { ShopProductEntity } from './shop-product.entity';
 import { ShopProductFactory } from './shop-product.factory';
@@ -81,7 +81,7 @@ export class ShopProductRepository extends BasePostgresRepository<ShopProductEnt
       orderBy.createdAt = query.sortDirection;
     }
 
-    const [records, postCount] = await Promise.all([
+    const [records, productCount] = await Promise.all([
       this.client.post.findMany({
         where, orderBy, skip, take,
         include: {
@@ -94,9 +94,9 @@ export class ShopProductRepository extends BasePostgresRepository<ShopProductEnt
     return {
       entities: records.map((record) => this.createEntityFromDocument(record)),
       currentPage: query?.page,
-      totalPages: this.calculateProductPageCount(postCount, take),
+      totalPages: this.calculateProductPageCount(productCount, take),
       itemsPerPage: take,
-      totalItems: postCount,
+      totalItems: productCount,
     }
   }
 }

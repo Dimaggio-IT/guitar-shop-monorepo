@@ -1,14 +1,13 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsNumber, IsOptional } from 'class-validator';
 
-import { SortBy, SortDirection } from '@project/shared/core';
+import { GuitarType, SortBy, SortDirection } from '@project/shared/core';
 
 import {
   PRODUCT_DEFAULT_COUNT_LIMIT,
   PRODUCT_DEFAULT_SORT_DIRECTION,
   PRODUCT_DEFAULT_PAGE_COUNT,
   PRODUCT_DEFAULT_SORT_BY,
-  GuitarType,
 } from '../shop-product.constant';
 import { ApiProperty } from '@nestjs/swagger';
 

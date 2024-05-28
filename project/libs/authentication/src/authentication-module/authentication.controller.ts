@@ -1,7 +1,6 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { MongoIdValidationPipe } from '@project/pipes';
 import { fillDto } from '@project/shared/helpers';
 
 import { AuthenticationService } from './authentication.service';
@@ -65,8 +64,8 @@ export class AuthenticationController {
   })
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  public async show(@Param('id', MongoIdValidationPipe) id: string) {
-    const existUser = await this.authService.getUser(id);
+  public async show(@Param('id') id: string) {
+    const existUser = await this.authService.getUserById(id);
     return existUser.toPOJO();
   }
 

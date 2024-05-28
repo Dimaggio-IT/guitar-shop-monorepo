@@ -1,24 +1,68 @@
-import { Injectable } from '@nestjs/common';
-
-import { BaseMemoryRepository } from '@project/shared/data-access';
-
 import { ShopUserEntity } from './shop-user.entity';
+import { BasePostgresRepository } from '@project/shared/data-access';
 import { ShopUserFactory } from './shop-user.factory';
+import { AuthUser } from '@project/shared/core';
+import { PrismaClientService } from '@project/shared/models';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
-export class ShopUserRepository extends BaseMemoryRepository<ShopUserEntity> {
-  constructor(entityFactory: ShopUserFactory) {
-    super(entityFactory);
+export class ShopUserRepository extends BasePostgresRepository<ShopUserEntity, AuthUser> {
+  constructor(
+    entityFactory: ShopUserFactory,
+    readonly client: PrismaClientService,
+  ) {
+    super(entityFactory, client)
   }
 
-  public async findByEmail(email: string): Promise<ShopUserEntity | null> {
-    const entities = Array.from(this.entities.values());
-    const user = entities.find((entity) => entity.email === email);
+  public async save(entity: ShopUserEntity): Promise<ShopUserEntity> {
+    const record = await this.client.user.create({
+      data: {
+        ...entity
+      }
+    });
 
-    if (!user) {
-      return null;
+    entity.id = record.id;
+
+    return entity;
+  }
+
+  public async update(entity: ShopUserEntity): Promise<ShopUserEntity> {
+    const record = await this.client.user.update({
+      where: { id: entity.id },
+      data: {
+        ...entity
+      }
+    });
+
+    return this.createEntityFromDocument(record);
+  }
+
+  public async findById(id: string): Promise<ShopUserEntity> {
+    const document = await this.client.user.findFirst({
+      where: {
+        id,
+      }
+    });
+
+    if (!document) {
+      throw new NotFoundException(`User with id ${id} not found.`);
     }
 
-    return this.entityFactory.create(user);
+    return this.createEntityFromDocument(document);
+  }
+
+
+  public async findByEmail(email: string): Promise<ShopUserEntity> {
+    const document = await this.client.user.findFirst({
+      where: {
+        email,
+      }
+    });
+
+    if (!document) {
+      throw new NotFoundException(`User with id ${email} not found.`);
+    }
+
+    return this.createEntityFromDocument(document);
   }
 }
