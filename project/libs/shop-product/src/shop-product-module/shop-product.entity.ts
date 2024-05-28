@@ -1,96 +1,48 @@
-import { Entity, Post, StorableEntity, TPostContentList, TPostStatusList } from '@project/shared/core';
-import { BlogCommentEntity, BlogCommentFactory } from '@project/blog-comment';
-import { BlogLikeEntity, BlogLikeFactory } from '@project/blog-like';
-import { PostContentValue } from 'libs/shared/core/src/lib/types/post-type.type';
-import { PostStatusValue } from 'libs/shared/core/src/lib/types/post-status.type';
+import { Entity, Product, StorableEntity } from '@project/shared/core';
+import { GuitarType, StringCount } from './shop-product.constant';
 
-export class BlogPostEntity extends Entity implements StorableEntity<Post> {
-  public userId?: string;
-  public type?: TPostContentList;
-  public status?: TPostStatusList;
-  public tags?: string[];
-  public comments: BlogCommentEntity[];
-  public likes: BlogLikeEntity[];
-  public createdAt?: Date;
-  public postedAt?: Date;
-  public isReposted: boolean;
-  public originalUserId?: string;
-  public originalPostId?: string;
-  public title?: string;
+export class ShopProductEntity extends Entity implements StorableEntity<Product> {
+  public name?: string;
   public description?: string;
-  public link?: string;
-  public quoteAuthor?: string;
-  public excerpt?: string;
-  public likesCount?: number;
-  public commentsCount?: number;
+  public createdAt?: Date;
+  public photo?: string;
+  public type?: GuitarType;
+  public article?: string;
+  public stringCount?: StringCount;
+  public price?: number;
 
-  constructor(post?: Post) {
+  constructor(product?: Product) {
     super();
-    this.populate(post);
+    this.populate(product);
   }
 
-  public populate(post?: Post) {
-    if (!post) {
+  public populate(product?: Product) {
+    if (!product) {
       return;
     }
 
-    this.id = post.id ?? undefined;
-    this.userId = post.userId;
-    this.type = post.type ?? PostContentValue.Text;
-    this.status = post.status ?? PostStatusValue.Draft;
-    this.tags = post.tags ?? [];
-    this.comments = [];
-    this.likes = [];
-    this.createdAt = post.createdAt ?? undefined;
-    this.postedAt = post.postedAt ?? undefined;
-    this.isReposted = post.isReposted ?? undefined;
-    this.originalUserId = post.originalUserId ?? undefined;
-    this.originalPostId = post.originalPostId ?? undefined;
-    this.title = post.title ?? undefined;
-    this.description = post.description ?? undefined;
-    this.link = post.link ?? undefined;
-    this.quoteAuthor = post.quoteAuthor ?? undefined;
-    this.excerpt = post.excerpt ?? undefined;
-    this.likesCount = post.likesCount ?? 0;
-    this.commentsCount = post.commentsCount ?? 0;
-
-    const blogCommentFactory = new BlogCommentFactory();
-    for (const comment of post.comments) {
-      const blogCommentEntity = blogCommentFactory.create(comment);
-      this.comments.push(blogCommentEntity);
-    }
-
-    const blogLikeFactory = new BlogLikeFactory();
-    for (const like of post.likes) {
-      const blogLikeEntity = blogLikeFactory.create(like);
-      this.likes.push(blogLikeEntity);
-    }
-
-    this.likesCount = this.likes.length;
-    this.commentsCount = this.comments.length;
+    this.id = product.id ?? undefined;
+    this.name = product.name;
+    this.description = product.description;
+    this.createdAt = product.createdAt;
+    this.photo = product.photo;
+    this.type = product.type;
+    this.article = product.article;
+    this.stringCount = product.stringCount;
+    this.price = product.price;
   }
 
-  public toPOJO(): Post {
+  public toPOJO(): Product {
     return {
       id: this.id,
-      userId: this.userId,
-      type: this.type,
-      status: this.status,
-      tags: this.tags,
-      comments: this.comments.map((commentEntity) => commentEntity.toPOJO()),
-      likes: this.likes.map((likeEntity) => likeEntity.toPOJO()),
-      createdAt: this.createdAt,
-      postedAt: this.postedAt,
-      isReposted: this.isReposted,
-      originalUserId: this.originalUserId,
-      originalPostId: this.originalPostId,
-      title: this.title,
+      name: this.name,
       description: this.description,
-      link: this.link,
-      quoteAuthor: this.quoteAuthor,
-      excerpt: this.excerpt,
-      likesCount: this.likesCount,
-      commentsCount: this.commentsCount,
+      createdAt: this.createdAt,
+      photo: this.photo,
+      type: this.type,
+      article: this.article,
+      stringCount: this.stringCount,
+      price: this.price,
     }
   }
 }

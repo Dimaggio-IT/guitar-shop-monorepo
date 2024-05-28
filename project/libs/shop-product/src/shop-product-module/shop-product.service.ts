@@ -1,101 +1,65 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PaginationResult } from '@project/shared/core';
 
-import { BlogPostRepository } from './shop-product.repository';
-import { TPostDto } from './dto/create-product.dto';
-import { BlogPostEntity } from './shop-product.entity';
-import { ShopQuery } from './query/shop-product.common-query';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { BlogPostFactory } from './shop-product.factory';
-import { ProductError } from './shop-product.constant';
-import { BlogTitleQuery } from './query/shop-product.title-query';
-
+import { ShopProductRepository } from './shop-product.repository';
+import { CreateProductDto } from './dto/create-product.dto';
+import { ShopProductEntity } from './shop-product.entity';
+import { ShopQuery } from './query/shop-product.query';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { ShopProductFactory } from './shop-product.factory';
 
 @Injectable()
 export class ShopProductService {
   constructor(
-    private readonly postRepository: BlogPostRepository,
+    private readonly productRepository: ShopProductRepository,
   ) { }
 
-  public async createPost(dto: TPostDto): Promise<BlogPostEntity> {
-    const newPost = BlogPostFactory.createFromPostDto(dto);
-    await this.postRepository.save(newPost);
+  public async createProduct(dto: CreateProductDto): Promise<ShopProductEntity> {
+    const newProduct = ShopProductFactory.createFromPostDto(dto);
+    await this.productRepository.save(newProduct);
 
-    return newPost;
+    return newProduct;
   }
 
-  public async deletePost(id: string, userId: string): Promise<void> {
-    const deletingPost = await this.getPostById(id);
+  public async deleteProductById(id: string): Promise<void> {
+    const product = await this.getProductById(id);
 
-    if (deletingPost?.userId === userId) {
-      await this.postRepository.deleteById(id);
+    if (product) {
+      await this.productRepository.deleteById(id);
     } else {
-      throw new NotFoundException(`Post with ID ${id} not found`);
+      throw new NotFoundException(`Product with ID ${id} not found`);
     }
   }
 
-  public async getPostById(id: string): Promise<BlogPostEntity> {
-    return this.postRepository.findById(id);
+  public async getProductById(id: string): Promise<ShopProductEntity> {
+    return this.productRepository.findById(id);
   }
 
-  public async getNews(): Promise<BlogPostEntity[]> {
-    return this.postRepository.findNews();
+  public async getAllProductsByQuery(query?: ShopQuery): Promise<PaginationResult<ShopProductEntity>> {
+    return this.productRepository.findByQuery(query);
   }
 
-  public async getUserPostsCount(id: string): Promise<number> {
-    return this.postRepository.getPostCount({ userId: id });
-  }
+  public async updateProduct(dto: UpdateProductDto): Promise<ShopProductEntity> {
+    const existsProduct = await this.productRepository.findById(dto.id);
 
-  public async getAllPostsByCommonQuery(query?: ShopQuery): Promise<PaginationResult<BlogPostEntity>> {
-    return this.postRepository.findByCommonQuery(query);
-  }
-
-  public async updatePost(id: string, dto: UpdatePostDto, userId: string): Promise<BlogPostEntity> {
-    const existsPost = await this.postRepository.findById(id);
-
-    if (existsPost?.userId !== userId) {
-      throw new NotFoundException(`You can't update post with ID ${id}`);
+    if (!existsProduct) {
+      throw new NotFoundException(`You can't update product with ID ${dto.id}`);
     }
 
     let hasChanges = false;
 
     for (const [key, value] of Object.entries(dto)) {
-      if (value !== undefined && existsPost[key] !== value) {
-        existsPost[key] = value;
+      if (value !== undefined && existsProduct[key] !== value) {
+        existsProduct[key] = value;
         hasChanges = true;
       }
     }
 
     if (!hasChanges) {
-      return existsPost;
+      return existsProduct;
     }
 
-    return this.postRepository.update(id, existsPost);
-  }
-
-  public async rePost(id: string, userId: string): Promise<BlogPostEntity> {
-    const post = await this.postRepository.findById(id);
-
-    if (post.isReposted) {
-      throw new BadRequestException(ProductError.AlreadyReposted)
-    }
-
-    post.userId = userId;
-    post.isReposted = true;
-    post.originalPostId = post.id;
-    post.originalUserId = post.userId;
-
-    await this.postRepository.save(post);
-
-    return post;
-  }
-
-  async getUnpublishedUserPosts(userId: string): Promise<BlogPostEntity[]> {
-    return this.postRepository.findUnpublishedUserPosts(userId);
-  }
-
-  async getPostsByTitle(search: BlogTitleQuery): Promise<BlogPostEntity[]> {
-    return this.postRepository.findByTitleQuery(search);
+    return this.productRepository.update(existsProduct);
   }
 }

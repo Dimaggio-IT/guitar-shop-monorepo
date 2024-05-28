@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 
 import { EntityFactory, Post } from '@project/shared/core';
 
-import { BlogPostEntity } from './shop-product.entity';
-import { TPostDto } from './dto/create-product.dto';
+import { ShopProductEntity } from './shop-product.entity';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
-export class BlogPostFactory implements EntityFactory<BlogPostEntity> {
-  public create(entityPlainData: Post): BlogPostEntity {
-    return new BlogPostEntity(entityPlainData);
+export class ShopProductFactory implements EntityFactory<ShopProductEntity> {
+  public create(entityPlainData: Post): ShopProductEntity {
+    return new ShopProductEntity(entityPlainData);
   }
 
-  public static createFromPostDto(dto: TPostDto): BlogPostEntity {
-    return new BlogPostEntity(dto);
+  public static createFromPostDto(dto: CreateProductDto): ShopProductEntity {
+    return new ShopProductEntity(dto);
   }
 }

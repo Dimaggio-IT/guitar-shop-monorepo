@@ -1,14 +1,14 @@
 import { Transform } from 'class-transformer';
-import { IsIn, IsNumber, IsOptional, MaxLength, MinLength } from 'class-validator';
+import { IsIn, IsNumber, IsOptional } from 'class-validator';
 
-import { PostContent, SortBy, SortDirection } from '@project/shared/core';
+import { SortBy, SortDirection } from '@project/shared/core';
 
 import {
-  POST_DEFAULT_COUNT_LIMIT,
-  POST_DEFAULT_SORT_DIRECTION,
-  POST_DEFAULT_PAGE_COUNT,
-  POST_DEFAULT_SORT_BY,
-  PostTagDefaultParam
+  PRODUCT_DEFAULT_COUNT_LIMIT,
+  PRODUCT_DEFAULT_SORT_DIRECTION,
+  PRODUCT_DEFAULT_PAGE_COUNT,
+  PRODUCT_DEFAULT_SORT_BY,
+  GuitarType,
 } from '../shop-product.constant';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -16,27 +16,28 @@ import { ApiProperty } from '@nestjs/swagger';
 export class ShopQuery {
   @ApiProperty({
     description: 'Limit',
-    example: 25,
+    example: 7,
   })
-  @Transform(({ value }) => +value || POST_DEFAULT_COUNT_LIMIT)
+  @Transform(({ value }) => +value || PRODUCT_DEFAULT_COUNT_LIMIT)
   @IsNumber()
   @IsOptional()
-  public limit = POST_DEFAULT_COUNT_LIMIT;
+  public limit = PRODUCT_DEFAULT_COUNT_LIMIT;
 
   @ApiProperty({
     description: 'Type',
     example: 'text',
   })
-  @IsIn(Object.values(PostContent))
+  @IsIn(Object.values(GuitarType))
   @IsOptional()
-  public type?: PostContent;
+  public guitarType?: GuitarType;
 
   @ApiProperty({
-    description: 'User ID',
-    example: '1',
+    description: 'String count',
+    example: '12',
   })
+  @IsIn(Object.values(GuitarType))
   @IsOptional()
-  public userId?: string;
+  public stringCount?: GuitarType;
 
   @ApiProperty({
     description: 'Sort by',
@@ -44,16 +45,7 @@ export class ShopQuery {
   })
   @IsIn(Object.values(SortBy))
   @IsOptional()
-  public sortBy?: SortBy = POST_DEFAULT_SORT_BY;
-
-  @ApiProperty({
-    description: 'Tag',
-    example: 'tag',
-  })
-  @IsOptional()
-  @MinLength(PostTagDefaultParam.MinLength)
-  @MaxLength(PostTagDefaultParam.MaxLength)
-  public tag?: string = '';
+  public sortBy?: SortBy = PRODUCT_DEFAULT_SORT_BY;
 
   @ApiProperty({
     description: 'Sort direction',
@@ -61,13 +53,13 @@ export class ShopQuery {
   })
   @IsIn(Object.values(SortDirection))
   @IsOptional()
-  public sortDirection?: SortDirection = POST_DEFAULT_SORT_DIRECTION;
+  public sortDirection?: SortDirection = PRODUCT_DEFAULT_SORT_DIRECTION;
 
   @ApiProperty({
     description: 'Page',
     example: 1,
   })
-  @Transform(({ value }) => +value || POST_DEFAULT_PAGE_COUNT)
+  @Transform(({ value }) => +value || PRODUCT_DEFAULT_PAGE_COUNT)
   @IsOptional()
-  public page: number = POST_DEFAULT_PAGE_COUNT;
+  public page: number = PRODUCT_DEFAULT_PAGE_COUNT;
 }

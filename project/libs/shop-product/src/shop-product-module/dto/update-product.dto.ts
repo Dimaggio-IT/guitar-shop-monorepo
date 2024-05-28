@@ -9,6 +9,9 @@ import { ArticleLength, DescriptionLength, GuitarType, NameLength, PriceLength, 
 import { Transform } from 'class-transformer';
 
 export class UpdateProductDto {
+  @IsString()
+  public id: string;
+
   @IsOptional()
   @IsString()
   @MinLength(NameLength.Min)

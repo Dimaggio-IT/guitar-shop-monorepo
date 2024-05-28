@@ -17,22 +17,19 @@ import {
 import { fillDto } from '@project/shared/helpers';
 
 import { ShopProductService } from './shop-product.service';
-import { ShopQuery } from './query/shop-product.common-query';
-import { BlogPostWithPaginationRdo } from './rdo/shop-product-with-pagination.rdo';
-import { TPostDto } from './dto/create-product.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { ShopQuery } from './query/shop-product.query';
+import { ShopProductWithPaginationRdo } from './rdo/shop-product-with-pagination.rdo';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { ProductError, ProductInfo } from './shop-product.constant';
-import { JwtAuthGuard } from 'libs/account/authentication/src/guards/jwt-auth.guard';
-import { RequestWithUser } from 'libs/account/authentication/src/authentication-module/request-with-user.interface';
-import { BlogTitleQuery } from './query/shop-product.title-query';
-import { BlogNotifyService } from '@project/blog-notify';
+import { JwtAuthGuard } from 'libs/authentication/src/guards/jwt-auth.guard';
+import { RequestWithUser } from 'libs/authentication/src/authentication-module/request-with-user.interface';
 
-@Controller('posts')
-export class BlogPostController {
+@Controller('products')
+export class ShopProductController {
   constructor(
-    private readonly postService: ShopProductService,
-    private readonly notifyService: BlogNotifyService,
+    private readonly productService: ShopProductService,
   ) { }
 
   @ApiResponse({
@@ -41,9 +38,9 @@ export class BlogPostController {
   })
   @Get('/:id')
   public async show(@Param('id') id: string) {
-    const post = await this.postService.getPostById(id);
+    const product = await this.productService.getProductById(id);
 
-    return post.toPOJO();
+    return product.toPOJO();
   }
 
   @ApiResponse({
@@ -52,49 +49,13 @@ export class BlogPostController {
   })
   @Get('/')
   public async index(@Query() query: ShopQuery) {
-    const postsWithPagination = await this.postService.getAllPostsByCommonQuery(query);
+    const productsWithPagination = await this.productService.getAllProductsByQuery(query);
     const result = {
-      ...postsWithPagination,
-      entities: postsWithPagination.entities.map((post) => post.toPOJO()),
+      ...productsWithPagination,
+      entities: productsWithPagination.entities.map((product) => product.toPOJO()),
     }
 
-    return fillDto(BlogPostWithPaginationRdo, result);
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: ProductInfo.ShowUserPostCount,
-  })
-  @Get('user-posts-count/:id')
-  public async getUserPostsCount(@Param('id') id: string) {
-    return this.postService.getUserPostsCount(id);
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: ProductInfo.Search,
-  })
-  @Get('search')
-  async searchPostsByTitle(@Query() query: BlogTitleQuery) {
-    const posts = await this.postService.getPostsByTitle(query);
-
-    return posts.map((post) => post.toPOJO());
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: ProductInfo.ShowAllUserDrafts,
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: ProductError.EmptyList,
-  })
-  @UseGuards(JwtAuthGuard)
-  @Get('drafts')
-  async showDrafts(@Req() { user }: RequestWithUser) {
-    const posts = await this.postService.getUnpublishedUserPosts(user.id);
-
-    return posts.map((post) => post.toPOJO());
+    return fillDto(ShopProductWithPaginationRdo, result);
   }
 
   @ApiResponse({
@@ -102,9 +63,9 @@ export class BlogPostController {
     description: ProductInfo.Add,
   })
   @Post('/')
-  public async create(@Body() dto: TPostDto) {
-    const newPost = await this.postService.createPost(dto);
-    return newPost.toPOJO();
+  public async create(@Body() dto: CreateProductDto) {
+    const newProduct = await this.productService.createProduct(dto);
+    return newProduct.toPOJO();
   }
 
   @ApiResponse({
@@ -119,22 +80,7 @@ export class BlogPostController {
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
   public async delete(@Param('id', ParseUUIDPipe) id: string, @Req() { user }: RequestWithUser): Promise<void> {
-    return this.postService.deletePost(id, user.id);
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: ProductInfo.Repost,
-  })
-  @UseGuards(JwtAuthGuard)
-  @Post('/repost/:id')
-  public async rePost(
-    @Req() { user }: RequestWithUser,
-    @Param('id') id: string,
-  ) {
-    const post = await this.postService.rePost(id, user.id);
-
-    return post.toPOJO();
+    return this.productService.deleteProduct(id, user.id);
   }
 
   @ApiResponse({
@@ -143,22 +89,9 @@ export class BlogPostController {
   })
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
-  public async update(@Param('id') id: string, @Body() dto: UpdatePostDto, @Req() { user }: RequestWithUser) {
-    const updatedPost = await this.postService.updatePost(id, dto, user.id);
+  public async update(@Param('id') id: string, @Body() dto: UpdateProductDto, @Req() { user }: RequestWithUser) {
+    const updatedProduct = await this.productService.updateProduct(id, dto, user.id);
 
-    return updatedPost.toPOJO();
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: ProductInfo.SendNews
-  })
-  @UseGuards(JwtAuthGuard)
-  @Get('news')
-  public async sendNews(@Req() { user }: RequestWithUser) {
-    const { email, id } = user;
-    const posts = await this.postService.getNews();
-
-    await this.notifyService.sendNews({ email, posts, userId: id });
+    return updatedProduct.toPOJO();
   }
 }
