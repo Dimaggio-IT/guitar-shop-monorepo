@@ -52,7 +52,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx ts-node seed.ts",
-        "cwd": "libs/blog/models/prisma"
+        "cwd": "libs/shared/models/prisma"
       }
     }
   },
