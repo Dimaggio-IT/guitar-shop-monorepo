@@ -90,8 +90,8 @@ export class AuthenticationService {
   }
 
   public async changePassword(dto: ChangePasswordUserDto): Promise<ShopUserEntity> {
-    const { password, newPassword, userId } = dto;
-    const user = await this.shopUserRepository.findById(userId);
+    const { password, newPassword, id } = dto;
+    const user = await this.shopUserRepository.findById(id);
 
     if (!await user.comparePassword(password)) {
       throw new BadRequestException(AUTH_USER_PASSWORD_WRONG);
@@ -99,7 +99,7 @@ export class AuthenticationService {
 
     const userEntity = await user.setPassword(newPassword);
 
-    return this.shopUserRepository.updateById(userId, userEntity);
+    return this.shopUserRepository.update(userEntity);
   }
 
   public async createUserToken(user: User): Promise<Token> {

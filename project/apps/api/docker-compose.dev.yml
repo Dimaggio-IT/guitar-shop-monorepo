@@ -36,6 +36,16 @@ services:
     networks:
       - guitar-shop
 
+  guitar-shop.fakesmtp:
+    image: gessnerfl/fake-smtp-server:2.2.0
+    container_name: "guitar-shop.fakesmtp"
+    hostname: "guitar-shop.fakesmtp"
+    ports:
+      - "8025:8025"
+      - "1085:8080"
+    networks:
+      - guitar-shop
+
 volumes:
   guitar-shop.postgres:
 
