@@ -1,10 +1,8 @@
 import { JwtService } from '@nestjs/jwt';
-import { ConfigType } from '@nestjs/config';
 import {
   ConflictException,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -18,7 +16,6 @@ import { createJWTPayload } from '@project/shared/helpers';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
-import { jwtConfig } from '@project/configuration';
 import {
   AUTH_USER_EXISTS,
   AUTH_USER_NOT_FOUND,
@@ -32,11 +29,7 @@ export class AuthenticationService {
 
   constructor(
     private readonly shopUserRepository: ShopUserRepository,
-
     private readonly jwtService: JwtService,
-
-    @Inject(jwtConfig.KEY)
-    private readonly jwtOptions: ConfigType<typeof jwtConfig>,
   ) { }
 
   public async register(dto: CreateUserDto): Promise<ShopUserEntity> {

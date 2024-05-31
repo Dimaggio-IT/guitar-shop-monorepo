@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 
@@ -24,7 +23,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { ProductError, ProductInfo } from './shop-product.constant';
 import { JwtAuthGuard } from 'libs/authentication/src/guards/jwt-auth.guard';
-import { RequestWithUser } from 'libs/authentication/src/authentication-module/request-with-user.interface';
 
 @Controller('products')
 export class ShopProductController {
@@ -79,7 +77,7 @@ export class ShopProductController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  public async delete(@Param('id', ParseUUIDPipe) id: string, @Req() { user }: RequestWithUser): Promise<void> {
+  public async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.productService.deleteProductById(id);
   }
 

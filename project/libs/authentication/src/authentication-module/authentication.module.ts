@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import { ShopUserModule } from '@project/shop-user';
-import { ConfigurationModule } from '@project/configuration';
+import { ConfigurationModule, getJwtOptions } from '@project/configuration';
 
 import { JwtAccessStrategy } from '../strategies/jwt-access.strategy';
 import { AuthenticationController } from './authentication.controller';
@@ -11,6 +13,10 @@ import { LocalStrategy } from '../strategies/local.strategy';
 @Module({
   imports: [
     ShopUserModule,
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: getJwtOptions,
+    }),
     ConfigurationModule,
   ],
   controllers: [
