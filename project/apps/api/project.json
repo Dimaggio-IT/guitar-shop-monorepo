@@ -9,14 +9,14 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "blog:build"
+        "buildTarget": "api:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "blog:build:development"
+          "buildTarget": "api:build:development"
         },
         "production": {
-          "buildTarget": "blog:build:production"
+          "buildTarget": "api:build:production"
         }
       }
     },
