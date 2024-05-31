@@ -54,6 +54,12 @@
         "command": "npx ts-node seed.ts",
         "cwd": "libs/shared/models/prisma"
       }
+    },
+    "docker:compose": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose --file ./apps/api/docker-compose.dev.yml --project-name 'guitar-shop' --env-file ./apps/api/api.env up -d",
+      }
     }
   },
   "tags": []

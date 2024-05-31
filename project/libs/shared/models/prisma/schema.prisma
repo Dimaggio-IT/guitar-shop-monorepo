@@ -28,8 +28,8 @@ model Product {
   photo          String?
   type           GuitarType @default(electro)
   article        String?
-  StringCount    Int
-  Price          Int?
+  stringCount    Int        @map("string_count")
+  price          Int?
 
   @@index([article])
   @@map("products")

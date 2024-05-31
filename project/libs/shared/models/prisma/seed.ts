@@ -45,7 +45,9 @@ async function seedDb(prismaClient: PrismaClient) {
 
   for (const product of mockProducts) {
     await prismaClient.product.upsert({
-      data: {
+      where: {id: product.id},
+      update: {},
+      create: {
         id: product.id,
         name: product.name,
         description: product.description,
