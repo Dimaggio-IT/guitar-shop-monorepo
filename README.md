@@ -18,7 +18,7 @@
 
 4. TypeScript
 
-5. MongoDB / PostgreSQL
+5. PostgreSQL
 
 6. ООП
 
