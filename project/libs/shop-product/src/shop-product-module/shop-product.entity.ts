@@ -1,14 +1,14 @@
 import { Entity, Product, StorableEntity } from '@project/shared/core';
-import { GuitarType, StringCount } from '@project/shared/core';
+import { TGuitarType } from '@project/shared/core';
 
 export class ShopProductEntity extends Entity implements StorableEntity<Product> {
   public name?: string;
   public description?: string;
   public createdAt?: Date;
   public photo?: string;
-  public type?: GuitarType;
+  public type?: TGuitarType;
   public article?: string;
-  public stringCount?: StringCount;
+  public stringCount?: number;
   public price?: number;
 
   constructor(product?: Product) {

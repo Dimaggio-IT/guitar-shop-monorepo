@@ -22,14 +22,14 @@ export class ShopProductRepository extends BasePostgresRepository<ShopProductEnt
     return Math.ceil(totalCount / limit);
   }
 
-  public async getProductCount(where: Prisma.PostWhereInput): Promise<number> {
+  public async getProductCount(where: Prisma.ProductWhereInput): Promise<number> {
     return this.client.product.count({ where });
   }
 
   public async save(entity: ShopProductEntity): Promise<ShopProductEntity> {
     const record = await this.client.product.create({
       data: {
-        ...entity
+        ...entity.toPOJO()
       },
     });
 
@@ -64,7 +64,7 @@ export class ShopProductRepository extends BasePostgresRepository<ShopProductEnt
     const record = await this.client.product.update({
       where: { id: entity.id },
       data: {
-        ...entity
+        ...entity.toPOJO()
       }
     });
 
@@ -74,19 +74,19 @@ export class ShopProductRepository extends BasePostgresRepository<ShopProductEnt
   public async findByQuery(query?: ShopQuery): Promise<PaginationResult<ShopProductEntity>> {
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit;
-    const where: Prisma.PostWhereInput = {};
-    const orderBy: Prisma.PostOrderByWithRelationInput = {};
+    const where: Prisma.ProductWhereInput = {};
+    const orderBy: Prisma.ProductOrderByWithRelationInput = {};
 
     if (query?.sortDirection) {
       orderBy.createdAt = query.sortDirection;
     }
 
     const [records, productCount] = await Promise.all([
-      this.client.post.findMany({
-        where, orderBy, skip, take,
-        include: {
-          comments: true,
-        },
+      this.client.product.findMany({
+        where,
+        orderBy,
+        skip,
+        take,
       }),
       this.getProductCount(where),
     ]);

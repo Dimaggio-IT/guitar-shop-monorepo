@@ -1,13 +1,13 @@
-import { GuitarType, StringCount } from '../enums/product.enum';
+import { TGuitarType } from '../types/guitar.type';
 
 export interface Product {
   id?: string;
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
   createdAt?: Date;
-  photo?: string;
-  type?: GuitarType;
-  article?: string;
-  stringCount?: StringCount;
-  price?: number;
+  photo: string;
+  type: TGuitarType;
+  article: string;
+  stringCount: number;
+  price: number;
 }

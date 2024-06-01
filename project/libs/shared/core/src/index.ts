@@ -16,3 +16,4 @@ export { JwtToken } from './lib/interfaces/jwt-token.interface';
 export { SortDirection } from './lib/enums/sort-direction.enum';
 export { SortBy } from './lib/enums/sort-by.enum';
 export { GuitarType, StringCount } from './lib/enums/product.enum';
+export { TGuitarType } from './lib/types/guitar.type';

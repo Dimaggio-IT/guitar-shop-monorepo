@@ -32,10 +32,10 @@ export class CreateProductDto {
 
   @IsEnum(StringCount)
   @Transform(({ value }) => +value)
-  public StringCount: number;
+  public stringCount: number;
 
   @Transform(({ value }) => +value)
   @MinLength(PriceLength.Min)
   @MaxLength(PriceLength.Max)
-  public Price: number;
+  public price: number;
 }
