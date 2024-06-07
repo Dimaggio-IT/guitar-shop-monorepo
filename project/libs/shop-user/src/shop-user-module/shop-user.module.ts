@@ -7,6 +7,6 @@ import { PrismaClientModule } from '@project/shared/models';
 @Module({
   imports: [PrismaClientModule],
   providers: [ShopUserRepository, ShopUserFactory],
-  exports: [ShopUserRepository],
+  exports: [ShopUserRepository, ShopUserFactory],
 })
 export class ShopUserModule { }

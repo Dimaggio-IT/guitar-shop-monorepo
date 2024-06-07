@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillDto } from '@project/shared/helpers';
@@ -30,6 +30,7 @@ export class AuthenticationController {
   })
   @Post('register')
   public async create(@Body() dto: CreateUserDto) {
+    // console.log("test");
     const newUser = await this.authService.register(dto);
     const { email, login, id } = newUser;
     // TODO: send email with link to confirm registration
@@ -38,7 +39,7 @@ export class AuthenticationController {
 
   @ApiResponse({
     type: LoggedUserRdo,
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     description: AuthenticationResponseMessage.LoggedSuccess,
   })
   @ApiResponse({
@@ -49,8 +50,19 @@ export class AuthenticationController {
   @Post('login')
   public async login(@Req() { user }: RequestWithUser) {
     const userToken = await this.authService.createUserToken(user);
-    
+
     return fillDto(LoggedUserRdo, { ...user.toPOJO(), ...userToken });
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: AuthenticationResponseMessage.UserChecked,
+  })
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  @Post('check')
+  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
   }
 
   @ApiResponse({
@@ -67,11 +79,5 @@ export class AuthenticationController {
   public async show(@Param('id') id: string) {
     const existUser = await this.authService.getUserById(id);
     return existUser.toPOJO();
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('check')
-  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
-    return payload;
   }
 }

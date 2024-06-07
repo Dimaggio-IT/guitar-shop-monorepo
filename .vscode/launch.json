@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run and debug NestJS",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/project/node_modules/.bin/nx",
+      "args": ["serve", "api", "--configuration=development"],
+      "cwd": "${workspaceFolder}/project",
+      "envFile": "${workspaceFolder}/project/apps/api/.env",
+      "env": {
+        "NODE_OPTIONS": "--max-http-header-size=100000",
+        "TS_NODE_IGNORE": "false",
+        "TS_NODE_PROJECT": "${workspaceFolder}/project/apps/api/tsconfig.json"
+      },
+      "console": "integratedTerminal"
+    }
+  ]
+}

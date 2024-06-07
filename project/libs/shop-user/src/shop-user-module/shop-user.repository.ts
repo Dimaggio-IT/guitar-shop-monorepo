@@ -17,7 +17,7 @@ export class ShopUserRepository extends BasePostgresRepository<ShopUserEntity, A
   public async save(entity: ShopUserEntity): Promise<ShopUserEntity> {
     const record = await this.client.user.create({
       data: {
-        ...entity
+        ...entity.toPOJO(),
       }
     });
 
@@ -30,7 +30,7 @@ export class ShopUserRepository extends BasePostgresRepository<ShopUserEntity, A
     const record = await this.client.user.update({
       where: { id: entity.id },
       data: {
-        ...entity
+        ...entity.toPOJO(),
       }
     });
 
@@ -58,11 +58,6 @@ export class ShopUserRepository extends BasePostgresRepository<ShopUserEntity, A
         email,
       }
     });
-
-    if (!document) {
-      throw new NotFoundException(`User with id ${email} not found.`);
-    }
-
     return this.createEntityFromDocument(document);
   }
 }

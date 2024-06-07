@@ -10,7 +10,11 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
-import { ShopUserRepository, ShopUserEntity } from '@project/shop-user';
+import {
+  ShopUserRepository,
+  ShopUserEntity,
+  ShopUserFactory,
+} from '@project/shop-user';
 import { Token, User } from '@project/shared/core';
 import { createJWTPayload } from '@project/shared/helpers';
 
@@ -28,30 +32,22 @@ export class AuthenticationService {
   private readonly logger = new Logger(AuthenticationService.name);
 
   constructor(
-    private readonly shopUserRepository: ShopUserRepository,
+    private readonly userRepository: ShopUserRepository,
     private readonly jwtService: JwtService,
   ) { }
 
   public async register(dto: CreateUserDto): Promise<ShopUserEntity> {
-    const { email, login, password } = dto;
-
-    const shopUser = {
-      email,
-      login,
-      passwordHash: ''
-    };
-
-    const existUser = await this.shopUserRepository
-      .findByEmail(email);
+    const existUser = await this.userRepository
+      .findByEmail(dto.email);
 
     if (existUser) {
       throw new ConflictException(AUTH_USER_EXISTS);
     }
 
-    const userEntity = await new ShopUserEntity(shopUser)
-      .setPassword(password)
+    const userEntity = ShopUserFactory.createFromDto(dto);
+    await userEntity.setPassword(dto.password);
 
-    this.shopUserRepository
+    await this.userRepository
       .save(userEntity);
 
     return userEntity;
@@ -59,7 +55,7 @@ export class AuthenticationService {
 
   public async verifyUser(dto: LoginUserDto): Promise<ShopUserEntity> {
     const { email, password } = dto;
-    const existUser = await this.shopUserRepository.findByEmail(email);
+    const existUser = await this.userRepository.findByEmail(email);
 
     if (!existUser) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
@@ -73,7 +69,7 @@ export class AuthenticationService {
   }
 
   public async getUserById(id: string): Promise<ShopUserEntity> {
-    const user = await this.shopUserRepository.findById(id);
+    const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
@@ -84,7 +80,7 @@ export class AuthenticationService {
 
   public async changePassword(dto: ChangePasswordUserDto): Promise<ShopUserEntity> {
     const { password, newPassword, id } = dto;
-    const user = await this.shopUserRepository.findById(id);
+    const user = await this.userRepository.findById(id);
 
     if (!await user.comparePassword(password)) {
       throw new BadRequestException(AUTH_USER_PASSWORD_WRONG);
@@ -92,7 +88,7 @@ export class AuthenticationService {
 
     const userEntity = await user.setPassword(newPassword);
 
-    return this.shopUserRepository.update(userEntity);
+    return this.userRepository.update(userEntity);
   }
 
   public async createUserToken(user: User): Promise<Token> {
@@ -107,7 +103,7 @@ export class AuthenticationService {
   }
 
   public async getUserByEmail(email: string): Promise<ShopUserEntity> {
-    const user = await this.shopUserRepository.findByEmail(email);
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);

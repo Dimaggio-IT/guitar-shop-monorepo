@@ -20,10 +20,10 @@ export class ShopUserEntity extends Entity implements StorableEntity<AuthUser> {
       return;
     }
 
-    this.id = user.id ?? '';
+    this.id = user.id ?? undefined;
     this.email = user.email;
     this.login = user.login;
-    this.passwordHash = user.passwordHash;
+    this.passwordHash = user.passwordHash ?? undefined;
   }
 
   public toPOJO(): AuthUser {

@@ -21,14 +21,14 @@ datasource db {
 }
 
 model Product {
-  id             String     @id @default(uuid())
+  id             String @id @default(uuid()) @map("id")
   name           String
   description    String
-  createdAt      DateTime   @default(now()) @map("created_at")
+  createdAt      DateTime @default(now()) @map("created_at")
   photo          String?
   type           GuitarType @default(electro)
   article        String?
-  stringCount    Int        @map("string_count")
+  stringCount    Int  @map("string_count")
   price          Int?
 
   @@index([article])
