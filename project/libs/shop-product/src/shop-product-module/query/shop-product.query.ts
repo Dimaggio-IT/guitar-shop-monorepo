@@ -28,19 +28,18 @@ export class ShopQuery {
   })
   @IsIn(Object.values(GuitarType))
   @IsOptional()
-  public guitarType?: GuitarType;
+  public type?: GuitarType;
 
   @ApiProperty({
     description: 'String count',
     example: '12',
   })
-  @IsIn(Object.values(GuitarType))
   @IsOptional()
-  public stringCount?: GuitarType;
+  public string?: number;
 
   @ApiProperty({
     description: 'Sort by',
-    example: 'createdAt',
+    example: 'price',
   })
   @IsIn(Object.values(SortBy))
   @IsOptional()

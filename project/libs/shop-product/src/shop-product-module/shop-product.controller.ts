@@ -47,7 +47,7 @@ export class ShopProductController {
   })
   @Get('/')
   public async index(@Query() query: ShopQuery) {
-    const productsWithPagination = await this.productService.getAllProductsByQuery(query);
+    const productsWithPagination = await this.productService.getProductsByQuery(query);
     const result = {
       ...productsWithPagination,
       entities: productsWithPagination.entities.map((product) => product.toPOJO()),

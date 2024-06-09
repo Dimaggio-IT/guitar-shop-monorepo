@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
-import { PaginationResult, Product } from '@project/shared/core';
+import { PaginationResult, Product, SortDirection } from '@project/shared/core';
 import { BasePostgresRepository } from '@project/shared/data-access';
 import { PrismaClientService } from '@project/shared/models';
 
@@ -77,8 +77,20 @@ export class ShopProductRepository extends BasePostgresRepository<ShopProductEnt
     const where: Prisma.ProductWhereInput = {};
     const orderBy: Prisma.ProductOrderByWithRelationInput = {};
 
-    if (query?.sortDirection) {
+    // sorting
+    if (query?.sortBy && query?.sortDirection && query.sortBy === 'price') {
+      orderBy.price = query.sortDirection;
+    } else if (query?.sortBy && query?.sortDirection && query.sortBy === 'date') {
       orderBy.createdAt = query.sortDirection;
+    } else {
+      orderBy.createdAt = SortDirection.Asc;
+    }
+
+    // filtering
+    if (query?.type) {
+      where.type = query.type;
+    } else if (query?.string) {
+      where.stringCount = query.string;
     }
 
     const [records, productCount] = await Promise.all([

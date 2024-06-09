@@ -36,7 +36,7 @@ export class ShopProductService {
     return this.productRepository.findById(id);
   }
 
-  public async getAllProductsByQuery(query?: ShopQuery): Promise<PaginationResult<ShopProductEntity>> {
+  public async getProductsByQuery(query?: ShopQuery): Promise<PaginationResult<ShopProductEntity>> {
     return this.productRepository.findByQuery(query);
   }
 
