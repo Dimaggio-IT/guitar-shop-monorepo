@@ -4,19 +4,19 @@ import * as Joi from 'joi';
 const DEFAULT_SMTP_PORT = 8025;
 
 export interface MailConfig {
-  mailHost: string;
-  mailPort: number;
-  mailUser: string;
-  mailPassword: string;
-  mailFrom: string;
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  from: string;
 }
 
 const validationSchema = Joi.object({
-    mailHost: Joi.string().valid().hostname().required(),
-    mailPort: Joi.number().port().default(DEFAULT_SMTP_PORT),
-    mailUser: Joi.string().required(),
-    mailPassword: Joi.string().required(),
-    mailFrom: Joi.string().required(),
+    host: Joi.string().valid().hostname().required(),
+    port: Joi.number().port().default(DEFAULT_SMTP_PORT),
+    user: Joi.string().required(),
+    password: Joi.string().required(),
+    from: Joi.string().required(),
 });
 
 function validateConfig(config: MailConfig): void {
@@ -28,11 +28,11 @@ function validateConfig(config: MailConfig): void {
 
 function getConfig(): MailConfig {
   const config: MailConfig = {
-      mailHost: process.env.MAIL_SMTP_HOST,
-      mailPort: parseInt(process.env.MAIL_SMTP_PORT ?? DEFAULT_SMTP_PORT.toString(), 10),
-      mailUser: process.env.MAIL_USER_NAME,
-      mailPassword: process.env.MAIL_USER_PASSWORD,
-      mailFrom: process.env.MAIL_FROM,
+      host: process.env.MAIL_SMTP_HOST,
+      port: parseInt(process.env.MAIL_SMTP_PORT ?? DEFAULT_SMTP_PORT.toString(), 10),
+      user: process.env.MAIL_USER_NAME,
+      password: process.env.MAIL_USER_PASSWORD,
+      from: process.env.MAIL_FROM,
   };
 
   validateConfig(config);

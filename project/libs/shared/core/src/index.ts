@@ -12,6 +12,7 @@ export { Token } from './lib/interfaces/token.interface';
 export { TokenPayload } from './lib/interfaces/token-payload.interface';
 export { RequestWithTokenPayload } from './lib/interfaces/request-with-token-payload.interface';
 export { JwtToken } from './lib/interfaces/jwt-token.interface';
+export { Member } from './lib/interfaces/member.interface';
 
 export { SortDirection } from './lib/enums/sort-direction.enum';
 export { SortBy } from './lib/enums/sort-by.enum';

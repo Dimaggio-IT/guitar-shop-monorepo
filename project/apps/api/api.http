@@ -21,8 +21,8 @@ POST {{baseAuthUrl}}/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "walton-goggins@hollywood.io",
-  "login": "walton-goggins",
+  "email": "walton2-goggins@hollywood.io",
+  "login": "walton2-goggins",
   "avatar": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Walton_Goggins_by_Gage_Skidmore.jpg/220px-Walton_Goggins_by_Gage_Skidmore.jpg",
   "password": "123456"
 }

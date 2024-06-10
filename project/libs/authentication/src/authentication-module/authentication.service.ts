@@ -26,6 +26,7 @@ import {
   AUTH_USER_PASSWORD_WRONG
 } from './authentication.constant';
 import { ChangePasswordUserDto } from '../dto/change-password.dto';
+import { MailService } from 'libs/mail/src/mail-module/mail.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -34,6 +35,7 @@ export class AuthenticationService {
   constructor(
     private readonly userRepository: ShopUserRepository,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) { }
 
   public async register(dto: CreateUserDto): Promise<ShopUserEntity> {
@@ -47,8 +49,14 @@ export class AuthenticationService {
     const userEntity = ShopUserFactory.createFromDto(dto);
     await userEntity.setPassword(dto.password);
 
-    await this.userRepository
-      .save(userEntity);
+    await this.userRepository.save(userEntity);
+    await this.mailService.sendNotifyNewUser(
+      {
+        id: userEntity.id,
+        login: userEntity.login,
+        email: userEntity.email
+      }
+    );
 
     return userEntity;
   }

@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { ShopUserModule } from '@project/shop-user';
 import { getJwtOptions } from '@project/configuration';
+import { MailModule } from '@project/mail';
 
 import { JwtAccessStrategy } from '../strategies/jwt-access.strategy';
 import { AuthenticationController } from './authentication.controller';
@@ -17,6 +18,7 @@ import { LocalStrategy } from '../strategies/local.strategy';
       inject: [ConfigService],
       useFactory: getJwtOptions,
     }),
+    MailModule,
   ],
   controllers: [
     AuthenticationController,

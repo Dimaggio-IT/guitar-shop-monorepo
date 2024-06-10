@@ -30,10 +30,8 @@ export class AuthenticationController {
   })
   @Post('register')
   public async create(@Body() dto: CreateUserDto) {
-    // console.log("test");
     const newUser = await this.authService.register(dto);
-    const { email, login, id } = newUser;
-    // TODO: send email with link to confirm registration
+
     return newUser.toPOJO();
   }
 
