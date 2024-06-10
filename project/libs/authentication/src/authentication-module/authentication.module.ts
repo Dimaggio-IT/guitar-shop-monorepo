@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { ShopUserModule } from '@project/shop-user';
-import { ConfigurationModule, getJwtOptions } from '@project/configuration';
+import { getJwtOptions } from '@project/configuration';
 
 import { JwtAccessStrategy } from '../strategies/jwt-access.strategy';
 import { AuthenticationController } from './authentication.controller';
@@ -17,7 +17,6 @@ import { LocalStrategy } from '../strategies/local.strategy';
       inject: [ConfigService],
       useFactory: getJwtOptions,
     }),
-    ConfigurationModule,
   ],
   controllers: [
     AuthenticationController,

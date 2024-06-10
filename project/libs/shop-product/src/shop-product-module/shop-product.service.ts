@@ -40,26 +40,26 @@ export class ShopProductService {
     return this.productRepository.findByQuery(query);
   }
 
-  public async updateProduct(dto: UpdateProductDto): Promise<ShopProductEntity> {
-    const existsProduct = await this.productRepository.findById(dto.id);
+  public async updateProduct(id: string, dto: UpdateProductDto): Promise<ShopProductEntity> {
+    const existingProduct = await this.productRepository.findById(id);
 
-    if (!existsProduct) {
-      throw new NotFoundException(`You can't update product with ID ${dto.id}`);
+    if (!existingProduct) {
+      throw new NotFoundException(`You can't update product with ID ${id}`);
     }
 
     let hasChanges = false;
 
     for (const [key, value] of Object.entries(dto)) {
-      if (value !== undefined && existsProduct[key] !== value) {
-        existsProduct[key] = value;
+      if (value !== undefined && existingProduct[key] !== value) {
+        existingProduct[key] = value;
         hasChanges = true;
       }
     }
 
     if (!hasChanges) {
-      return existsProduct;
+      return existingProduct;
     }
 
-    return this.productRepository.update(existsProduct);
+    return this.productRepository.update(existingProduct);
   }
 }

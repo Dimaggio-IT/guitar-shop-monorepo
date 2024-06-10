@@ -3,6 +3,8 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  Min,
+  Max
 } from 'class-validator';
 import { ArticleLength, DescriptionLength, NameLength, PriceLength } from '../shop-product.constant';
 import { Transform } from 'class-transformer';
@@ -35,7 +37,7 @@ export class CreateProductDto {
   public stringCount: number;
 
   @Transform(({ value }) => +value)
-  @MinLength(PriceLength.Min)
-  @MaxLength(PriceLength.Max)
+  @Min(PriceLength.Min)
+  @Max(PriceLength.Max)
   public price: number;
 }

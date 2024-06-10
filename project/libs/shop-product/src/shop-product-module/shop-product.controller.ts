@@ -23,6 +23,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { ProductError, ProductInfo } from './shop-product.constant';
 import { JwtAuthGuard } from 'libs/authentication/src/guards/jwt-auth.guard';
+import { ShopProductRdo } from './rdo/shop-product.rdo';
 
 @Controller('products')
 export class ShopProductController {
@@ -60,6 +61,7 @@ export class ShopProductController {
     status: HttpStatus.CREATED,
     description: ProductInfo.Add,
   })
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   public async create(@Body() dto: CreateProductDto) {
     const newProduct = await this.productService.createProduct(dto);
@@ -75,8 +77,8 @@ export class ShopProductController {
     description: ProductError.Delete
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete('/:id')
   @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
   public async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.productService.deleteProductById(id);
   }
@@ -87,9 +89,9 @@ export class ShopProductController {
   })
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
-  public async update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
-    const updatedProduct = await this.productService.updateProduct(dto);
+  public async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateProductDto) {
+    const updatedProduct = await this.productService.updateProduct(id, dto);
 
-    return updatedProduct.toPOJO();
+    return fillDto(ShopProductRdo, updatedProduct.toPOJO());
   }
 }
