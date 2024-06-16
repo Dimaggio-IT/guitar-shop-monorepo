@@ -49,3 +49,18 @@ export function parseTime(time: string): TimeAndUnit {
 
   return { value, unit }
 }
+
+export const generateRandomValue = (min: number, max: number, numAfterDigit = 0) =>
+  Number(((Math.random() * (max - min)) + min).toFixed(numAfterDigit));
+
+
+export function getRandomItems<T>(items: T[], length?: number): T[] {
+  const startPosition = length ? 0 : generateRandomValue(0, items.length - 1);
+  const endPosition = length ?? (startPosition + generateRandomValue(startPosition, items.length));
+
+  return items.slice(startPosition, endPosition);
+}
+
+export const getRandomItem = <T>(items: T[]): T => items[generateRandomValue(0, items.length - 1)];
+
+export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
