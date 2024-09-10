@@ -1,7 +1,7 @@
-import { Entity, Product, StorableEntity } from '@project/shared/core';
+import { Entity, IProduct, StorableEntity } from '@project/shared/core';
 import { TGuitarType } from '@project/shared/core';
 
-export class ShopProductEntity extends Entity implements StorableEntity<Product> {
+export class ShopProductEntity extends Entity implements StorableEntity<IProduct> {
   public name?: string;
   public description?: string;
   public createdAt?: Date;
@@ -11,12 +11,12 @@ export class ShopProductEntity extends Entity implements StorableEntity<Product>
   public stringCount?: number;
   public price?: number;
 
-  constructor(product?: Product) {
+  constructor(product?: IProduct) {
     super();
     this.populate(product);
   }
 
-  public populate(product?: Product) {
+  public populate(product?: IProduct) {
     if (!product) {
       return;
     }
@@ -32,7 +32,7 @@ export class ShopProductEntity extends Entity implements StorableEntity<Product>
     this.price = product.price;
   }
 
-  public toPOJO(): Product {
+  public toPOJO(): IProduct {
     return {
       id: this.id,
       name: this.name,

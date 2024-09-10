@@ -51,5 +51,9 @@
     "https://showtehnica.ru/upload/resize_cache/iblock/de1/340_340_1/m3y97pg3ai0xax3zp6fzbe0hfpyaeixh.jpg"
   ],
   "types": ["electro", "acoustics", "ukukule"],
-  "stringCount": [4, 6, 7, 12]
+  "stringCount": [4, 6, 7, 12],
+  "user": {
+    "login": "admin",
+    "email": "admin@company.local"
+  }
 }

@@ -1,6 +1,6 @@
 import { TGuitarType } from '../types/guitar.type';
 
-export interface Product {
+export interface IProduct {
   id?: string;
   name: string;
   description: string;

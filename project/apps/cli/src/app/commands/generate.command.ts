@@ -1,10 +1,19 @@
 import { PrismaClient } from '@prisma/client';
 import { ICommand } from './index.js';
-import { Product, TMockServerData } from '@project/shared/core';
-import { MockItemGenerator } from '@project/shared/helpers';
-import { getErrorMessage } from '@project/shared/helpers';
+import { IProduct, TMockServerData } from '@project/shared/core';
+import {
+  MockItemGenerator,
+  MockUserGenerator,
+  getErrorMessage
+} from '@project/shared/helpers';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { IUser } from '@project/shared/core';
+import { ShopUserFactory } from '@project/shop-user';
+
+interface IGeneratedUser extends IUser {
+  password: string;
+}
 
 function isMockServerData(value: unknown): value is TMockServerData {
   return (
@@ -21,7 +30,8 @@ function isMockServerData(value: unknown): value is TMockServerData {
 
 export class GenerateCommand implements ICommand {
   private readonly _name: string = '--generate';
-  private _data: Product[] = [];
+  private _products: IProduct[] = [];
+  private _user: IGeneratedUser;
   private _initialData: TMockServerData;
   private _prismaClient: PrismaClient = new PrismaClient();
 
@@ -45,11 +55,18 @@ export class GenerateCommand implements ICommand {
   }
 
   private async write(itemCount: number) {
-    const mockGenerator = new MockItemGenerator(this._initialData);
+    const mockItemGenerator = new MockItemGenerator(this._initialData);
+    const mockUserGenerator = new MockUserGenerator(this._initialData);
+
+    const generatedUserData = mockUserGenerator.generate as unknown as IGeneratedUser;
+    this._user = generatedUserData;
+    const userEntity = ShopUserFactory.createFromDto(this._user);
+    await userEntity.setPassword(this._user.password);
+
     try {
       for (let i = 0; i < itemCount; i++) {
-        const item = mockGenerator.generate() as unknown as Product;
-        this._data.push(item);
+        const item = mockItemGenerator.generate() as unknown as IProduct;
+        this._products.push(item);
 
         await this._prismaClient.product.upsert({
           where: { id: item.id },
@@ -65,7 +82,18 @@ export class GenerateCommand implements ICommand {
             price: item.price,
           }
         })
-      }
+      };
+
+      await this._prismaClient.user.upsert({
+        where: { id: userEntity.id },
+        update: {},
+        create: {
+          id: userEntity.id,
+          login: userEntity.login,
+          email: userEntity.email,
+          passwordHash: userEntity.passwordHash,
+        }
+      });
     } catch (error: unknown) {
       console.error(getErrorMessage(error));
       globalThis.process.exit(1);
@@ -90,6 +118,7 @@ export class GenerateCommand implements ICommand {
       await this.load();
       await this.write(itemCount);
       console.info(`the elements have been created!`);
+      console.info(`the administrator's user have been created!`);
     } catch (error: unknown) {
       console.error('Can\'t generate data');
       console.error(getErrorMessage(error));

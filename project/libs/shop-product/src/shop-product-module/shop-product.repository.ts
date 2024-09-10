@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
-import { PaginationResult, Product, SortDirection } from '@project/shared/core';
+import { PaginationResult, IProduct, SortDirection } from '@project/shared/core';
 import { BasePostgresRepository } from '@project/shared/data-access';
 import { PrismaClientService } from '@project/shared/models';
 
@@ -10,7 +10,7 @@ import { ShopProductFactory } from './shop-product.factory';
 import { ShopQuery } from './query/shop-product.query';
 
 @Injectable()
-export class ShopProductRepository extends BasePostgresRepository<ShopProductEntity, Product> {
+export class ShopProductRepository extends BasePostgresRepository<ShopProductEntity, IProduct> {
   constructor(
     entityFactory: ShopProductFactory,
     readonly client: PrismaClientService,

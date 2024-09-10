@@ -18,7 +18,9 @@ export class HelpCommand implements ICommand {
             --help:            # печатает этот текст. Команда запускается по умолчанию
             --generate <n>:    # генерирует произвольное количество тестовых данных
                                  параметры:
-                                   <count> -обязательный. Количество элементов для генерации
+                                   <count> - обязательный. Количество элементов для генерации
+                                   <connection string> - DEPRECATED. В проекте
+                                   используется в качестве БД PostgreSQL и Prisma как ORM. В папке libs/shared/models/prisma уже есть .env файл в котором есть строка подключения к базе DATABASE_URL=postgres://admin:123456@localhost:5432/guitar_shop
     `));
   }
 }

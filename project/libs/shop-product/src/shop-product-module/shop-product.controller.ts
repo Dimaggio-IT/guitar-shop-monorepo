@@ -22,7 +22,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { ProductError, ProductInfo } from './shop-product.constant';
-import { JwtAuthGuard } from 'libs/authentication/src/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@project/shared/';
 import { ShopProductRdo } from './rdo/shop-product.rdo';
 
 @Controller('products')

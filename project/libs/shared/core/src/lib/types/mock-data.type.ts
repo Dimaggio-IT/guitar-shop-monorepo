@@ -4,4 +4,8 @@ export type TMockServerData = {
   photos: string[];
   types: string[];
   stringCount: number[];
+  user: {
+    login: string;
+    email: string;
+  };
 };

@@ -1,6 +1,6 @@
-import { User, TokenPayload } from '@project/shared/core';
+import { IUser, TokenPayload } from '@project/shared/core';
 
-export function createJWTPayload(user: User): TokenPayload {
+export function createJWTPayload(user: IUser): TokenPayload {
   return {
     sub: user.id,
     email: user.email,

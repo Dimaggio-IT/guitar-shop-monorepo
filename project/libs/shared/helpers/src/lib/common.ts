@@ -1,5 +1,6 @@
 import { ClassTransformOptions, plainToInstance } from 'class-transformer';
 import dayjs from 'dayjs';
+import passwordGenerator from 'generate-password-ts';
 
 export const getDate = () => {
   return dayjs().toISOString();
@@ -7,6 +8,23 @@ export const getDate = () => {
 
 export type DateTimeUnit = 's' | 'h' | 'd' | 'm' | 'y';
 export type TimeAndUnit = { value: number; unit: DateTimeUnit };
+
+type UserTypeForGeneratePassword = "admin" | "user";
+const PASSWORD_USER_DEFAULT = {
+  admin: 'admin'
+} as const;
+
+interface IOptionsGenRndPassword {
+  userType: UserTypeForGeneratePassword,
+  length?: number;
+  numbers?: boolean;
+  symbols?: boolean | string;
+  exclude?: string;
+  uppercase?: boolean;
+  lowercase?: boolean;
+  excludeSimilarCharacters?: boolean;
+  strict?: boolean;
+}
 
 export function fillDto<T, V>(
   DtoClass: new () => T,
@@ -53,7 +71,6 @@ export function parseTime(time: string): TimeAndUnit {
 export const generateRandomValue = (min: number, max: number, numAfterDigit = 0) =>
   Number(((Math.random() * (max - min)) + min).toFixed(numAfterDigit));
 
-
 export function getRandomItems<T>(items: T[], length?: number): T[] {
   const startPosition = length ? 0 : generateRandomValue(0, items.length - 1);
   const endPosition = length ?? (startPosition + generateRandomValue(startPosition, items.length));
@@ -64,3 +81,5 @@ export function getRandomItems<T>(items: T[], length?: number): T[] {
 export const getRandomItem = <T>(items: T[]): T => items[generateRandomValue(0, items.length - 1)];
 
 export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
+
+export const generateRandomPassword = (options: IOptionsGenRndPassword): string => options.userType === "admin" ? PASSWORD_USER_DEFAULT.admin : passwordGenerator.generate(options);
