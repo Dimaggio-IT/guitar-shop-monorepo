@@ -21,3 +21,5 @@ export { GuitarType, StringCount } from './lib/enums/product.enum';
 export { TGuitarType } from './lib/types/guitar.type';
 export { TMockServerData } from './lib/types/mock-data.type';
 export { TPlainObject } from './lib/types/plain-object.type';
+
+export * from './lib/dto/create-user.dto'

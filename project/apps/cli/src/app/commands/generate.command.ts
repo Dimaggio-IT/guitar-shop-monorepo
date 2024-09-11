@@ -55,13 +55,15 @@ export class GenerateCommand implements ICommand {
   }
 
   private async write(itemCount: number) {
+    console.log(itemCount);
     const mockItemGenerator = new MockItemGenerator(this._initialData);
     const mockUserGenerator = new MockUserGenerator(this._initialData);
 
-    const generatedUserData = mockUserGenerator.generate as unknown as IGeneratedUser;
+    const generatedUserData = mockUserGenerator.generate() as unknown as IGeneratedUser;
     this._user = generatedUserData;
     const userEntity = ShopUserFactory.createFromDto(this._user);
     await userEntity.setPassword(this._user.password);
+    userEntity.id = this._user.id ?? undefined;
 
     try {
       for (let i = 0; i < itemCount; i++) {

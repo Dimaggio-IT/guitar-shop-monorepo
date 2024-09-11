@@ -3,10 +3,10 @@ import { TMockServerData } from '@project/shared/core';
 import {
   generateRandomValue,
   getRandomItem,
-} from '@project/shared/helpers';
-import { GENERATOR_CONFIG } from '@project/shared/helpers';
+} from '../common';
 import { TPlainObject } from '@project/shared/core';
 import { v4 as uuidV4 } from 'uuid';
+import { GENERATOR_CONFIG } from './mock-generator.constant';
 
 export class MockItemGenerator implements MockGenerator {
   constructor(private readonly mockData: TMockServerData) { }

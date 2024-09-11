@@ -2,7 +2,7 @@ import { MockGenerator } from './mock-generator.interface';
 import { TMockServerData } from '@project/shared/core';
 import {
   generateRandomPassword,
-} from '@project/shared/helpers';
+} from '../common';
 import { TPlainObject } from '@project/shared/core';
 import { v4 as uuidV4 } from 'uuid';
 

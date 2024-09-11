@@ -12,7 +12,7 @@ export class HelpCommand implements ICommand {
     console.info(chalk.whiteBright(`
         Программа для подготовки данных для REST API сервера.
         Синтаксис:
-            скрипт --<command> [--arguments]
+            скрипт --<command> [arguments]
         Команды:
             --version:         # выводит номер версии приложения из файла package.json
             --help:            # печатает этот текст. Команда запускается по умолчанию
@@ -20,7 +20,10 @@ export class HelpCommand implements ICommand {
                                  параметры:
                                    <count> - обязательный. Количество элементов для генерации
                                    <connection string> - DEPRECATED. В проекте
-                                   используется в качестве БД PostgreSQL и Prisma как ORM. В папке libs/shared/models/prisma уже есть .env файл в котором есть строка подключения к базе DATABASE_URL=postgres://admin:123456@localhost:5432/guitar_shop
+                                   используется в качестве БД PostgreSQL и Prisma как ORM.
+                                   В папке libs/shared/models/prisma уже есть .env файл в котором
+                                   строка подключения к базе
+                                   DATABASE_URL=postgres://admin:123456@localhost:5432/guitar_shop
     `));
   }
 }

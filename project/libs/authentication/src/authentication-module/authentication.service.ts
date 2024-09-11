@@ -18,7 +18,7 @@ import {
 import { Token, IUser } from '@project/shared/core';
 import { createJWTPayload } from '@project/shared/helpers';
 
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto } from '@project/shared/core';
 import { LoginUserDto } from '../dto/login-user.dto';
 import {
   AUTH_USER_EXISTS,
@@ -26,7 +26,7 @@ import {
   AUTH_USER_PASSWORD_WRONG
 } from './authentication.constant';
 import { ChangePasswordUserDto } from '../dto/change-password.dto';
-import { MailService } from 'libs/mail/src/mail-module/mail.service';
+import { MailService } from '@project/mail';
 
 @Injectable()
 export class AuthenticationService {

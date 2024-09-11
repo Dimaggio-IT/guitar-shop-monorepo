@@ -4,12 +4,12 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillDto } from '@project/shared/helpers';
 
 import { AuthenticationService } from './authentication.service';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto } from '@project/shared/core';
 import { LoggedUserRdo } from '../rdo/logged-user.rdo';
 import { UserRdo } from '../rdo/user.rdo';
 import { AuthenticationResponseMessage } from './authentication.constant';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { LocalAuthGuard } from '../guards/local-auth.guard';
+import { JwtAuthGuard } from '@project/guards';
+import { LocalAuthGuard } from '@project/guards';
 import { RequestWithUser } from './request-with-user.interface';
 import { RequestWithTokenPayload } from './request-with-token-payload.interface';
 
