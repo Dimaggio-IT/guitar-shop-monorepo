@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-import { ShopProductRdo } from './shop-product.rdo';
+import { ProductRdo } from '../../../../shared/rdo1/product.rdo';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ShopProductWithPaginationRdo {
@@ -8,7 +8,7 @@ export class ShopProductWithPaginationRdo {
     description: 'Entity list',
   })
   @Expose()
-  public entities: ShopProductRdo[];
+  public entities: ProductRdo[];
 
   @ApiProperty({
     description: 'The total number of pages',

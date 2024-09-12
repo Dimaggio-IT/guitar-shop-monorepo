@@ -23,7 +23,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { ProductError, ProductInfo } from './shop-product.constant';
 import { JwtAuthGuard } from '@project/guards';
-import { ShopProductRdo } from './rdo/shop-product.rdo';
+import { ProductRdo } from '../../../shared/rdo1/product.rdo';
 
 @Controller('products')
 export class ShopProductController {
@@ -92,6 +92,6 @@ export class ShopProductController {
   public async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateProductDto) {
     const updatedProduct = await this.productService.updateProduct(id, dto);
 
-    return fillDto(ShopProductRdo, updatedProduct.toPOJO());
+    return fillDto(ProductRdo, updatedProduct.toPOJO());
   }
 }

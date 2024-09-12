@@ -1,7 +1,7 @@
 import { GuitarType } from '@project/shared/core';
 import { Expose } from 'class-transformer';
 
-export class ShopProductRdo {
+export class ProductRdo {
   @Expose()
   public id: string;
 

@@ -1,53 +1,28 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
+import { Route, Routes } from 'react-router-dom';
+import {
+  NotFound,
+  Login,
+  Main,
+  Product,
+  ProductList,
+  Registration,
+  Item,
+} from '../pages';
+import { AppRoute } from '../common';
 
-import NxWelcome from './nx-welcome';
-
-import { Route, Routes, Link } from 'react-router-dom';
-
-export function App() {
+function App(): JSX.Element {
   return (
-    <div>
-      <NxWelcome title="frontend" />
-
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
-    </div>
+    <Routes>
+      <Route element={<Main />} path="/">
+        <Route path={AppRoute.Register} element={<Registration />} />
+        <Route path={AppRoute.Login} element={<Login />} />
+        <Route path={AppRoute.Products} element={<ProductList />} />
+        <Route path={`${AppRoute.Product}`} element={<Product />} />
+        <Route path={`${AppRoute.Item}`} element={<Item />} />
+        <Route path={AppRoute.NotFound} element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 
-export default App;
+export { App };
