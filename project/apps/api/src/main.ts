@@ -7,7 +7,8 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors();
+  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('«The Guitar-shop»')
     .setDescription('The Guitar-shop service API')
