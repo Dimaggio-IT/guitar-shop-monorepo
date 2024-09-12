@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-import { ProductRdo } from '../../../../shared/rdo1/product.rdo';
+import { ProductRdo } from '@project/shared/core';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ShopProductWithPaginationRdo {

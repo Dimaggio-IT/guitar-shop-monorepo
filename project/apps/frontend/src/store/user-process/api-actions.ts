@@ -36,20 +36,12 @@ const postAsyncReg = createAsyncThunk<TRegResponse, TRegData, TThunkApiConfig>(
     email,
     login,
     password,
-    location,
-    sex,
-    birthday,
-    role
   }, { extra: api }) => {
     try {
       const { data } = await api.post<TRegResponse>(APIRoute.Register, {
         email,
         login,
         password,
-        location,
-        sex,
-        birthday,
-        role,
       });
       return data;
     } catch (error) {

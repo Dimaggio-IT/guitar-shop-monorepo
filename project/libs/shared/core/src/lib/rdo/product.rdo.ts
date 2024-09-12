@@ -1,4 +1,4 @@
-import { GuitarType } from '@project/shared/core';
+import { GuitarType } from '../../lib/enums/product.enum';
 import { Expose } from 'class-transformer';
 
 export class ProductRdo {

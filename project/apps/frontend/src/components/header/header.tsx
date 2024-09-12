@@ -21,6 +21,11 @@ function Header(): JSX.Element {
               </li>
               <li className="main-nav__item">
                 <a className="link main-nav__link" href="#">
+                  Где купить?
+                </a>
+              </li>
+              <li className="main-nav__item">
+                <a className="link main-nav__link" href="#">
                   Список товаров
                 </a>
               </li>

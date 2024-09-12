@@ -1,20 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NameSpace, RequestStatus } from '../../common';
-import { Comment, IProductRdo } from '@project/common';
+import { NameSpace } from '../../common';
+import { IProduct } from '@project/shared/core';
 import { getAsyncProduct } from './api-actions';
 
 type TProductData = {
   isProductLoading: boolean;
-  product: IProductRdo | null;
-  comments: Comment[];
-  commentRequestStatus: RequestStatus;
+  product: IProduct | null;
 };
 
 const initialState: TProductData = {
   isProductLoading: false,
   product: null,
-  comments: [],
-  commentRequestStatus: RequestStatus.Idle,
 };
 
 const productData = createSlice({

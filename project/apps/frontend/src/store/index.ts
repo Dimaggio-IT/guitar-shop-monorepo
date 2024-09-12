@@ -1,7 +1,7 @@
 
 export * from './product-data/product-data';
 export * from './product-data/api-actions';
-// export * from './product-data/selectors';
+export * from './product-data/selectors';
 
 export * from './products-data/products-data';
 export * from './products-data/api-actions';

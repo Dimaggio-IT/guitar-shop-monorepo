@@ -23,3 +23,5 @@ export { TMockServerData } from './lib/types/mock-data.type';
 export { TPlainObject } from './lib/types/plain-object.type';
 
 export * from './lib/dto/create-user.dto'
+
+export * from './lib/rdo/product.rdo';

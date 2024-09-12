@@ -6,6 +6,4 @@ const selectAuthStatus = (state: Pick<TState, NameSpace.User>): AuthorizationSta
 
 const selectIsAuthStatus = (state: Pick<TState, NameSpace.User>): boolean => state[NameSpace.User].authorizationStatus !== AuthorizationStatus.NoAuth;
 
-// const selectUserAuthData = (state: Pick<TState, NameSpace.User>): TAuthResponse | null => state[NameSpace.User].user;
-
 export { selectAuthStatus, selectIsAuthStatus };

@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IProductRdo } from '@project/common';
+import { IProduct } from '@project/shared/core';
 import { NameSpace } from '../../common';
 import { getAsyncProducts } from '..';
 
 type TProductsData = {
-  products: IProductRdo[];
+  products: IProduct[];
   isProductsLoading: boolean;
 };
 

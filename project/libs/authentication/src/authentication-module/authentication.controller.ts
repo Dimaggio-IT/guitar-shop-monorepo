@@ -8,8 +8,8 @@ import { CreateUserDto } from '@project/shared/core';
 import { LoggedUserRdo } from '../rdo/logged-user.rdo';
 import { UserRdo } from '../rdo/user.rdo';
 import { AuthenticationResponseMessage } from './authentication.constant';
-import { JwtAuthGuard } from '@project/guards';
-import { LocalAuthGuard } from '@project/guards';
+import { JwtAuthGuard } from '@project/shared/guards';
+import { LocalAuthGuard } from '@project/shared/guards';
 import { RequestWithUser } from './request-with-user.interface';
 import { RequestWithTokenPayload } from './request-with-token-payload.interface';
 

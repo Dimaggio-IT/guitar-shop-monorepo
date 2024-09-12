@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { replaceURI } from '../../common';
 import { TThunkApiConfig } from '../../common';
-import { IProductRdo } from '@project/common';
+import { IProduct } from '@project/shared/core';
 import { APIRoute, NameSpace } from '../../common';
 import { TProductId } from '../../common';
 
-const getAsyncProduct = createAsyncThunk<IProductRdo, TProductId, TThunkApiConfig>(
+const getAsyncProduct = createAsyncThunk<IProduct, TProductId, TThunkApiConfig>(
   `${NameSpace.Product}/fetchProduct`,
   async (productId, { extra: api }) => {
     try {
