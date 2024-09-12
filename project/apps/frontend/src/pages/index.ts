@@ -2,7 +2,7 @@ export * from './item/item';
 
 export * from './login/login';
 
-export * from './main/main';
+export * from './layout/layout';
 
 export * from './not-found/not-found';
 
