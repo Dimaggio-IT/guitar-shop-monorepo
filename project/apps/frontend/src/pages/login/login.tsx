@@ -12,21 +12,25 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Login(): JSX.Element {
   const authStatus = useAppSelector(selectAuthStatus);
+
   const navigate = useNavigate();
-  const [isSubmitButtonOk, setIsSubmitButtonOk] = useState(false);
+
+  const [isValid, setIsValid] = useState(false);
+
   const [formData, setFormData] = useState<TAuthData>({
     email: '',
     password: '',
   });
+
   const dispatch = useAppDispatch();
 
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
     setFormData({ ...formData, [name]: value });
     if (validateLoginForm({ ...formData, [name]: value })) {
-      setIsSubmitButtonOk(true);
+      setIsValid(true);
     } else {
-      setIsSubmitButtonOk(false);
+      setIsValid(false);
     }
   };
 
@@ -74,8 +78,8 @@ function Login(): JSX.Element {
                 value={formData.email}
                 required
               />
-              {!isSubmitButtonOk && (
-                <p className="input-login__error">Заполните поле</p>
+              {!isValid && (
+                <p className="input-login__error">Заполните правильно все поля</p>
               )}
             </div>
             <div className="input-login">
@@ -97,14 +101,14 @@ function Login(): JSX.Element {
                   </svg>
                 </button>
               </span>
-              {!isSubmitButtonOk && (
-                <p className="input-login__error">Заполните поле</p>
+              {!isValid && (
+                <p className="input-login__error">Заполните правильно все поля</p>
               )}
             </div>
             <button
               className="button login__button button--medium"
               type="submit"
-              disabled={!isSubmitButtonOk}
+              disabled={!isValid}
             >
               Войти
             </button>
