@@ -1,9 +1,12 @@
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../common';
+
 function Header(): JSX.Element {
   return (
     <header className="header--admin header" id="header">
       <div className="container">
         <div className="header__wrapper">
-          <a className="header__logo logo" href="main.html">
+          <Link className="header__logo logo" to={AppRoute.Main}>
             <img
               className="logo__img"
               width="70"
@@ -11,31 +14,31 @@ function Header(): JSX.Element {
               src="./img/svg/logo.svg"
               alt="Логотип"
             />
-          </a>
+          </Link>
           <nav className="main-nav">
             <ul className="main-nav__list">
               <li className="main-nav__item">
-                <a className="link main-nav__link" href="main">
+                <Link className="link main-nav__link" to={AppRoute.Main}>
                   Каталог
-                </a>
+                </Link>
               </li>
               <li className="main-nav__item">
-                <a className="link main-nav__link" href="#">
+                <Link className="link main-nav__link" to={AppRoute.Main}>
                   Где купить?
-                </a>
+                </Link>
               </li>
               <li className="main-nav__item">
-                <a className="link main-nav__link" href="#">
+                <Link className="link main-nav__link" to={AppRoute.Main}>
                   Список товаров
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
           <div className="header__container">
             <span className="header__user-name">Имя</span>
-            <a
+            <Link
               className="header__link"
-              href="login.html"
+              to={AppRoute.Login}
               aria-label="Перейти в личный кабинет"
             >
               <svg
@@ -47,7 +50,7 @@ function Header(): JSX.Element {
                 <use xlinkHref="#icon-account"></use>
               </svg>
               <span className="header__link-text">Вход</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
