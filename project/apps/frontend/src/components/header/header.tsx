@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../common';
+import { useAppSelector } from '../../hooks';
+import { selectUserIds } from '../../store';
 
 function Header(): JSX.Element {
+  const user = useAppSelector(selectUserIds);
+
   return (
     <header className="header--admin header" id="header">
       <div className="container">
@@ -35,7 +39,7 @@ function Header(): JSX.Element {
             </ul>
           </nav>
           <div className="header__container">
-            <span className="header__user-name">Имя</span>
+            <span className="header__user-name">{user.login}</span>
             <Link
               className="header__link"
               to={AppRoute.Login}

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace, AuthorizationStatus } from '../../common';
 import { deleteAsyncAuth, getAsyncAuth, postAsyncAuth, postAsyncReg } from './api-actions';
 
-type TUserIds = {
+export type TUserIds = {
   id: string;
   login: string;
   email: string;
