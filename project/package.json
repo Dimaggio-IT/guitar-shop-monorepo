@@ -22,7 +22,7 @@
     "@types/react-redux": "7.1.27",
     "axios": "^1.6.0",
     "bcrypt": "5.1.1",
-    "class-transformer": "0.5.1",
+    "class-transformer": "^0.5.1",
     "class-validator": "0.14.1",
     "classnames": "^2.5.1",
     "dayjs": "1.11.10",
@@ -44,6 +44,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.24.7",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nx/esbuild": "19.1.2",

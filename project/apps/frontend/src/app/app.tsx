@@ -9,7 +9,7 @@ import {
   Login,
   Layout,
   Product,
-  ProductList,
+  Main,
   Registration,
   Item,
 } from '../pages';
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
             restrictedFor={AuthorizationStatus.NoAuth}
             redirectTo={AppRoute.Login}
           >
-            <ProductList />
+            <Main />
           </ProtectedRoute>
         }
       />
@@ -53,7 +53,7 @@ const router = createBrowserRouter(
             restrictedFor={AuthorizationStatus.NoAuth}
             redirectTo={AppRoute.Login}
           >
-            <ProductList />
+            <Main />
           </ProtectedRoute>
         }
       />

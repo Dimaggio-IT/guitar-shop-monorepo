@@ -8,6 +8,6 @@ export * from './not-found/not-found';
 
 export * from './product/product';
 
-export * from './product-list/product-list';
+export * from './main/main';
 
 export * from './registration/registration';
