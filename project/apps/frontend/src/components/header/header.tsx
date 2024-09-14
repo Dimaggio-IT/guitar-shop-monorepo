@@ -22,17 +22,17 @@ function Header(): JSX.Element {
           <nav className="main-nav">
             <ul className="main-nav__list">
               <li className="main-nav__item">
-                <Link className="link main-nav__link" to={AppRoute.Main}>
+                <Link className="link main-nav__link" to={AppRoute.Products}>
                   Каталог
                 </Link>
               </li>
               <li className="main-nav__item">
-                <Link className="link main-nav__link" to={AppRoute.Main}>
+                <Link className="link main-nav__link" to={AppRoute.Products}>
                   Где купить?
                 </Link>
               </li>
               <li className="main-nav__item">
-                <Link className="link main-nav__link" to={AppRoute.Main}>
+                <Link className="link main-nav__link" to={AppRoute.Products}>
                   Список товаров
                 </Link>
               </li>

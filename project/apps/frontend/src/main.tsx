@@ -1,6 +1,5 @@
 import { getAsyncAuth, store } from './store';
 import * as ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 
 import { App } from './app/app';
 import { Provider } from 'react-redux';
@@ -14,9 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <HelmetProvider>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <App />
     </Provider>
   </HelmetProvider>
 );

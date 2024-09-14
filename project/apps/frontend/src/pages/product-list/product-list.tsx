@@ -1,9 +1,25 @@
-// import { Helmet } from 'react-helmet-async';
-// import { Link } from 'react-router-dom';
-// import { AppRoute } from '../../common';
+import { Breadcrumbs, Cards, Filter, Pagination, Sort } from '../../components';
 
 function ProductList(): JSX.Element {
-  return <h1>Page Product-List</h1>;
+  return (
+    <main className="page-content">
+      <section className="product-list">
+        <div className="container">
+          <h1 className="product-list__title">Список товаров</h1>
+          <Breadcrumbs />
+          <div className="catalog">
+            <Filter />
+            <Sort />
+            <Cards />
+          </div>
+          <button className="button product-list__button button--red button--big">
+            Добавить новый товар
+          </button>
+          <Pagination  />
+        </div>
+      </section>
+    </main>
+  );
 }
 
 export { ProductList };
