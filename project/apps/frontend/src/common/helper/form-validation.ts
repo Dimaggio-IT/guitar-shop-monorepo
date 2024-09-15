@@ -15,7 +15,6 @@ const validateLoginForm = (formData: TAuthData): boolean => {
 };
 
 const validateRegForm = (formData: TRegData): boolean => {
-  console.log(formData);
   if (
     !validateEmail(formData.email) ||
     !validatePassword(formData.password) ||
