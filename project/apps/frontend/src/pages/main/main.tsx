@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Breadcrumbs, Cards, Filter, Pagination, Sort } from '../../components';
+import { Breadcrumbs, Cards, Filter, Sort } from '../../components';
 import {
   TSortingValues,
   TDirectionValues,
 } from '../../common/type/sorting.type';
 import {
   DEFAULT_SORT_BY,
-  DEFAULT_SORT_DIRECTION,
   FILTER_DEFAULT_STATE,
+  genericFilter,
+  genericSort,
+  IFilter,
+  ISorter,
+  SORT_DIRECTION,
   TFilterCheckProps,
   TFilterItems,
+  TProductValuesWithoutNullable,
 } from '../../common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
@@ -17,17 +22,20 @@ import {
   selectIsEmptyProducts,
   selectProducts,
 } from '../../store';
+import { IProduct } from '@project/shared/core';
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectProducts);
   const isEmptyProducts = useAppSelector(selectIsEmptyProducts);
 
-  const [sortBy, setSortBy] = useState<TSortingValues>(DEFAULT_SORT_BY);
+  const [activeSorter, setActiveSorter] = useState<ISorter<IProduct>>({
+    property: DEFAULT_SORT_BY,
+    isDescending: false,
+  });
   const [filters, setFilters] = useState<TFilterItems>(FILTER_DEFAULT_STATE);
-  const [products, setProducts] = useState(data);
-  const [sortDirection, setSortDirection] = useState<TDirectionValues>(
-    DEFAULT_SORT_DIRECTION
+  const [activeFilters, setActiveFilters] = useState<Array<IFilter<IProduct, TProductValuesWithoutNullable>>>(
+    []
   );
 
   useEffect(() => {
@@ -35,30 +43,57 @@ function Main(): JSX.Element {
   }, [dispatch]);
 
   const handleSortBy = (sorting: TSortingValues) => {
-    setSortBy(sorting);
+    setActiveSorter({ ...activeSorter, property: sorting });
   };
 
   const handleSortDirection = (direction: TDirectionValues) => {
-    setSortDirection(direction);
+    setActiveSorter({
+      ...activeSorter,
+      isDescending: direction === SORT_DIRECTION.Desc ? true : false,
+    });
   };
 
-  const handleFilterCheck = ({ id, type, checked }: TFilterCheckProps) => {
+  const handleFilterCheck = ({
+    id,
+    type,
+    changedFilterProperty,
+    isChecked,
+    value,
+  }: TFilterCheckProps) => {
     const foundedItemCopy = { ...filters[type].find((item) => item.id === id) };
-    foundedItemCopy.checked = !foundedItemCopy.checked;
+    foundedItemCopy.checked = isChecked;
     const newItems = filters[type].map((item) =>
       item.id === id ? foundedItemCopy : item
     );
-    const newFilters = {
+
+    //* для фильтрации товаров
+    isChecked
+      ? setActiveFilters([
+          ...activeFilters.filter(
+            (filter) => filter.property !== changedFilterProperty
+          ),
+          { property: changedFilterProperty, value },
+        ])
+      : setActiveFilters(
+          activeFilters.filter(
+            (filter) => filter.property !== changedFilterProperty
+          )
+        );
+
+    //* для обновления фильтров в UI
+    setFilters({
       ...filters,
       [type]: newItems,
-    };
-
-    setFilters(newFilters);
+    });
   };
 
   const handleFilterClear = () => {
     setFilters(FILTER_DEFAULT_STATE);
   };
+
+  const resultProducts = [...data]
+    .filter((item) => genericFilter<IProduct, TProductValuesWithoutNullable>(item, activeFilters))
+    .sort((itemA, itemB) => genericSort<IProduct>(itemA, itemB, activeSorter));
 
   return (
     <main className="page-content">
@@ -73,17 +108,17 @@ function Main(): JSX.Element {
               onFilterClear={handleFilterClear}
             />
             <Sort
-              sorting={sortBy}
-              direction={sortDirection}
+              sorting={activeSorter.property}
+              direction={
+                activeSorter.isDescending
+                  ? SORT_DIRECTION.Desc
+                  : SORT_DIRECTION.Asc
+              }
               onSortingChange={handleSortBy}
               onDirectionChange={handleSortDirection}
             />
-            <Cards />
+            {!isEmptyProducts && <Cards items={resultProducts} />}
           </div>
-          <button className="button product-list__button button--red button--big">
-            Добавить новый товар
-          </button>
-          <Pagination />
         </div>
       </section>
     </main>

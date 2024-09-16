@@ -55,7 +55,6 @@ export class GenerateCommand implements ICommand {
   }
 
   private async write(itemCount: number) {
-    console.log(itemCount);
     const mockItemGenerator = new MockItemGenerator(this._initialData);
     const mockUserGenerator = new MockUserGenerator(this._initialData);
 

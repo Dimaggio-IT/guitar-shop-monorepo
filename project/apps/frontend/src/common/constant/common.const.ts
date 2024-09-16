@@ -1,6 +1,6 @@
 const SORT_BY = {
   Price: 'price',
-  Date: 'date',
+  Date: 'createdAt',
 } as const;
 
 const SORT_DIRECTION = {

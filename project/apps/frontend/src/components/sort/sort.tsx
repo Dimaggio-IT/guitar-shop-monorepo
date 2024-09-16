@@ -67,7 +67,7 @@ function Sort({
             'catalog-sort__type-button--active': sorting === SORT_BY.Date,
           })}
           aria-label="по дате"
-          data-sort-by="date"
+          data-sort-by="createdAt"
           onClick={handleSortByClick}
         >
           по дате

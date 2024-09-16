@@ -1,4 +1,5 @@
 import { TGuitarType } from '@project/shared/core';
+import { TProductValuesWithoutNullable } from './product.type';
 
 const FILTER_GUITAR = {
   electro: 'Электрогитары',
@@ -20,6 +21,7 @@ type TFilterIDProp = TGuitarType | TFilterStringCountName;
 
 type TFilterItem = {
   id: TFilterIDProp;
+  value: TProductValuesWithoutNullable;
   label: string;
   checked: boolean;
   disabled: boolean;
@@ -32,12 +34,16 @@ type TFilterItems = {
 
 type TFilterType = "type";
 type TFilterString = "string";
+type TFilterStringCount = "stringCount";
 type TFilterItemType = TFilterType | TFilterString;
+type TFilterChangedProperty = TFilterType | TFilterStringCount;
 
 type TFilterCheckProps = {
   id: TFilterIDProp;
   type: TFilterItemType;
-  checked: boolean;
+  changedFilterProperty: TFilterChangedProperty;
+  isChecked: boolean;
+  value: TProductValuesWithoutNullable;
 };
 
 export {
@@ -48,4 +54,5 @@ export {
   type TGuitarType,
   type TFilterCheckProps,
   type TFilterItemType,
+  type TFilterChangedProperty,
 };

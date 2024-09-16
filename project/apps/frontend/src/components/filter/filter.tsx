@@ -2,10 +2,12 @@
 import { ChangeEvent } from 'react';
 import {
   FILTER_DEFAULT_STATE,
+  TFilterChangedProperty,
   TFilterCheckProps,
   TFilterIDProp,
   TFilterItems,
   TFilterItemType,
+  TProductValuesWithoutNullable,
 } from '../../common';
 
 type TFilterProps = {
@@ -19,7 +21,6 @@ function Filter({
   onFilterCheck = () => {},
   onFilterClear = () => {},
 }: TFilterProps): JSX.Element {
-  console.log(filters);
   const handleFilterCheck = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -27,7 +28,10 @@ function Filter({
     const target: TFilterCheckProps = {
       id: e.target.id as TFilterIDProp,
       type: e.target.dataset.type as TFilterItemType,
-      checked: e.target.checked,
+      changedFilterProperty: e.target.dataset
+        .property as TFilterChangedProperty,
+      isChecked: e.target.checked,
+      value: e.target.dataset.value as TProductValuesWithoutNullable,
     };
 
     onFilterCheck(target);
@@ -55,6 +59,8 @@ function Filter({
         checked={item.checked}
         disabled={item.disabled}
         data-type="type"
+        data-property="type"
+        data-value={item.value}
         onChange={handleFilterCheck}
       />
       <label htmlFor={item.id}>{item.label}</label>
@@ -74,6 +80,8 @@ function Filter({
         checked={item.checked}
         disabled={item.disabled}
         data-type="string"
+        data-property="stringCount"
+        data-value={item.value}
         onChange={handleFilterCheck}
       />
       <label htmlFor={item.id}>{item.label}</label>
