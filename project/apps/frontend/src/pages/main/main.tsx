@@ -5,7 +5,7 @@ import {
   TDirectionValues,
 } from '../../common/type/sorting.type';
 import {
-  DEFAULT_SORT_BY,
+  DEFAULT_ACTIVE_SORTING,
   FILTER_DEFAULT_STATE,
   genericFilter,
   genericSort,
@@ -29,10 +29,9 @@ function Main(): JSX.Element {
   const data = useAppSelector(selectProducts);
   const isEmptyProducts = useAppSelector(selectIsEmptyProducts);
 
-  const [activeSorter, setActiveSorter] = useState<ISorter<IProduct>>({
-    property: DEFAULT_SORT_BY,
-    isDescending: false,
-  });
+  const [activeSorter, setActiveSorter] = useState<ISorter<IProduct>>(
+    DEFAULT_ACTIVE_SORTING
+  );
   const [filters, setFilters] = useState<TFilterItems>(FILTER_DEFAULT_STATE);
   const [activeFilters, setActiveFilters] = useState<
     Array<IFilter<IProduct, TProductValuesWithoutNullable>>
@@ -67,12 +66,18 @@ function Main(): JSX.Element {
     );
 
     //* для фильтрации товаров
-    isChecked ? setActiveFilters([...activeFilters, { property: changedFilterProperty, value }]) : setActiveFilters([
-        ...activeFilters.filter(
-          (filter) =>
-            filter.property !== changedFilterProperty || filter.value !== value
-        ),
-      ]);
+    isChecked
+      ? setActiveFilters([
+          ...activeFilters,
+          { property: changedFilterProperty, value },
+        ])
+      : setActiveFilters([
+          ...activeFilters.filter(
+            (filter) =>
+              filter.property !== changedFilterProperty ||
+              filter.value !== value
+          ),
+        ]);
 
     //* для обновления фильтров в UI
     setFilters({
@@ -84,6 +89,7 @@ function Main(): JSX.Element {
   const handleFilterClear = () => {
     setFilters(FILTER_DEFAULT_STATE);
     setActiveFilters([]);
+    setActiveSorter(DEFAULT_ACTIVE_SORTING);
   };
 
   const resultProducts = [...data]
