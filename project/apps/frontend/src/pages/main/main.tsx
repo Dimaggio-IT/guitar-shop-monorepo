@@ -34,9 +34,9 @@ function Main(): JSX.Element {
     isDescending: false,
   });
   const [filters, setFilters] = useState<TFilterItems>(FILTER_DEFAULT_STATE);
-  const [activeFilters, setActiveFilters] = useState<Array<IFilter<IProduct, TProductValuesWithoutNullable>>>(
-    []
-  );
+  const [activeFilters, setActiveFilters] = useState<
+    Array<IFilter<IProduct, TProductValuesWithoutNullable>>
+  >([]);
 
   useEffect(() => {
     dispatch(getAsyncProducts());
@@ -67,18 +67,12 @@ function Main(): JSX.Element {
     );
 
     //* для фильтрации товаров
-    isChecked
-      ? setActiveFilters([
-          ...activeFilters.filter(
-            (filter) => filter.property !== changedFilterProperty
-          ),
-          { property: changedFilterProperty, value },
-        ])
-      : setActiveFilters(
-          activeFilters.filter(
-            (filter) => filter.property !== changedFilterProperty
-          )
-        );
+    isChecked ? setActiveFilters([...activeFilters, { property: changedFilterProperty, value }]) : setActiveFilters([
+        ...activeFilters.filter(
+          (filter) =>
+            filter.property !== changedFilterProperty || filter.value !== value
+        ),
+      ]);
 
     //* для обновления фильтров в UI
     setFilters({
@@ -89,10 +83,16 @@ function Main(): JSX.Element {
 
   const handleFilterClear = () => {
     setFilters(FILTER_DEFAULT_STATE);
+    setActiveFilters([]);
   };
 
   const resultProducts = [...data]
-    .filter((item) => genericFilter<IProduct, TProductValuesWithoutNullable>(item, activeFilters))
+    .filter((item) =>
+      genericFilter<IProduct, TProductValuesWithoutNullable>(
+        item,
+        activeFilters
+      )
+    )
     .sort((itemA, itemB) => genericSort<IProduct>(itemA, itemB, activeSorter));
 
   return (
